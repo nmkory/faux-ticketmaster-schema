@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS cinema;
 
 CREATE TABLE city (
     cityid int NOT NULL,
@@ -6,6 +7,15 @@ CREATE TABLE city (
     zipcode int NOT NULL,
     state varchar(255) NOT NULL,
     PRIMARY KEY (cityid)
+);
+
+CREATE TABLE cinema (
+    cinemaid int NOT NULL,
+    cityid int NOT NULL,
+    name varchar(255) NOT NULL,
+    totalcinematheaters int NOT NULL,
+    PRIMARY KEY(cinemaid),
+    FOREIGN KEY(cityid) REFERENCES city(cityid)
 );
 
 -- CREATE TABLE Payment (
@@ -68,14 +78,7 @@ CREATE TABLE city (
 -- 	PRIMARY KEY (MovieID),
 -- 	FOREIGN KEY (ShowID) REFERENCES Show(ShowID)
 -- );
--- CREATE TABLE Cinema (
---     CinemaID varchar(255),
--- 	CINEMATID varchar(255),
---     Name varchar(255),
---     TotalCinema int,
--- 	PRIMARY KEY(CinemaID),
--- 	FOREIGN KEY(CINEMATID) REFERENCES CinemaT(CinemaTID)
--- );
+
 -- CREATE TABLE CinemaT (
 --     CinemaTID varchar(255),
 --     TotalSeatNum varchar(255),
