@@ -1,5 +1,11 @@
-DROP TABLE IF EXISTS city;
-DROP TABLE IF EXISTS cinema;
+DROP TABLE IF EXISTS cinemaseating_has_cinematheater CASCADE;
+DROP TABLE IF EXISTS cinematheater_has_cinema CASCADE;
+DROP TABLE IF EXISTS cinema_has_city CASCADE;
+DROP TABLE IF EXISTS city CASCADE;
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema='public';
 
 CREATE TABLE city (
     cityid int NOT NULL,
@@ -8,14 +14,32 @@ CREATE TABLE city (
     state varchar(255) NOT NULL,
     PRIMARY KEY (cityid)
 );
-
-CREATE TABLE cinema (
+--
+CREATE TABLE cinema_has_city (
     cinemaid int NOT NULL,
     cityid int NOT NULL,
     name varchar(255) NOT NULL,
     totalcinematheaters int NOT NULL,
     PRIMARY KEY(cinemaid),
     FOREIGN KEY(cityid) REFERENCES city(cityid)
+);
+
+CREATE TABLE cinematheater_has_cinema (
+    cinematheaterid int NOT NULL,
+    cinemaid int NOT NULL,
+    totalseatnum int NOT NULL,
+    theatername varchar(255) NOT NULL,
+    PRIMARY KEY(cinematheaterid),
+    FOREIGN KEY(cinemaid) REFERENCES cinema_has_city(cinemaid)
+);
+
+CREATE TABLE cinemaseating_has_cinematheater (
+    cinemaseatid int NOT NULL,
+    seatnumber int NOT NULL,
+    type varchar(255) NOT NULL,
+    cinematheaterid int NOT NULL,
+    PRIMARY KEY(cinemaseatid),
+    FOREIGN KEY(cinematheaterid) REFERENCES cinematheater_has_cinema(cinematheaterid)
 );
 
 -- CREATE TABLE Payment (
@@ -79,12 +103,7 @@ CREATE TABLE cinema (
 -- 	FOREIGN KEY (ShowID) REFERENCES Show(ShowID)
 -- );
 
--- CREATE TABLE CinemaT (
---     CinemaTID varchar(255),
---     TotalSeatNum varchar(255),
---     CTName varchar(255),
--- 	PRIMARY KEY(CINEMATID)
--- );
+
 -- CREATE TABLE CinemaSeat (
 --     CinemaSID varchar(255),
 -- 	CINEMATID varchar(255),
