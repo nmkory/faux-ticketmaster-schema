@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS seatbooked CASCADE;
+DROP TABLE IF EXISTS found_in CASCADE;
 DROP TABLE IF EXISTS played_in CASCADE;
 DROP TABLE IF EXISTS cinemaseating_has_cinematheater CASCADE;
 DROP TABLE IF EXISTS cinematheater_has_cinema CASCADE;
@@ -119,21 +121,20 @@ CREATE TABLE played_in (
     FOREIGN KEY(cinematheaterid) REFERENCES cinematheater_has_cinema(cinematheaterid)
 );
 
--- CREATE TABLE Payment (
---     PaymentID varchar(255),
---     BookingID varchar(255),
---     TransactionID varchar(255),
---     Amount int,
---     PaymentDate timestamp,
---     PaymentMethod varchar(255),
---     PRIMARY KEY(PaymentID),
---     FOREIGN KEY(BookingID) REFERENCES Booking(BookingID)
--- );
+CREATE TABLE found_in (
+    showseatid int NOT NULL,
+    cinemaseatid int NOT NULL,
+    FOREIGN KEY(showseatid) REFERENCES showseating_has_show(showseatid),
+    FOREIGN KEY(cinemaseatid) REFERENCES cinemaseating_has_cinematheater(cinemaseatid)
+);
 
--- CREATE TABLE PlayedIn (
--- 	ShowID varchar(255),
--- 	CINEMATID varchar(255),
--- 	PRIMARY KEY(ShowID,CINEMATID),
--- 	FOREIGN KEY(ShowID) REFERENCES Show(ShowID),
--- 	FOREIGN KEY(CINEMATID) REFERENCES CinemaT(CINEMATID)
--- );
+CREATE TABLE seatbooked (
+  bookingid int NOT NULL,
+  showseatid int,
+  FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid),
+  FOREIGN KEY(showseatid) REFERENCES showseating_has_show(showseatid)
+);
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema='public';
