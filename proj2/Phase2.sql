@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS city CASCADE;
 DROP TABLE IF EXISTS showseating_has_show CASCADE;
 DROP TABLE IF EXISTS show_played_movie CASCADE;
 DROP TABLE IF EXISTS movie CASCADE;
+DROP TABLE IF EXISTS useraccount CASCADE;
 
 SELECT table_name
 FROM information_schema.tables
@@ -13,7 +14,7 @@ WHERE table_schema='public';
 CREATE TABLE city (
     cityid int NOT NULL,
     name varchar(255) NOT NULL,
-    zipcode int NOT NULL,
+    zipcode varchar(5) NOT NULL,
     state varchar(255) NOT NULL,
     PRIMARY KEY (cityid)
 );
@@ -75,6 +76,15 @@ CREATE TABLE showseating_has_show (
     FOREIGN KEY(showid) REFERENCES show_played_movie(showid)
 );
 
+CREATE TABLE useraccount (
+    email varchar(255) NOT NULL,
+    firstname varchar(255) NOT NULL,
+    lastname varchar(255) NOT NULL,
+    phone varchar(10) NOT NULL,
+    password varchar(255) NOT NULL,
+    PRIMARY KEY (email)
+);
+
 -- CREATE TABLE Payment (
 --     PaymentID varchar(255),
 --     BookingID varchar(255),
@@ -95,16 +105,6 @@ CREATE TABLE showseating_has_show (
 --     BoookingDate DateTime,
 -- 	PRIMARY KEY(BookingID),
 -- 	FOREIGN KEY(ShowSeatID) REFERENCES ShowSeating(ShowSeatID)
--- );
--- CREATE TABLE UserAccount (
---     Email varchar(255),
--- 	BookingID varchar(255),
---     FirstName varchar(255),
---     PhoneNum int,
---     LastName varchar(255),
---     Password varchar(255),
--- 	PRIMARY KEY(Email)
--- 	FOREIGN KEY(BookingID) REFERENCES Booking(BookingID)
 -- );
 
 -- CREATE TABLE PlayedIn (
