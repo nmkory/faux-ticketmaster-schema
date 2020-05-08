@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS cinematheater_has_cinema CASCADE;
 DROP TABLE IF EXISTS cinema_has_city CASCADE;
 DROP TABLE IF EXISTS city CASCADE;
 DROP TABLE IF EXISTS showseating_has_show CASCADE;
+DROP TABLE IF EXISTS booking_has_show_by_user CASCADE;
 DROP TABLE IF EXISTS show_played_movie CASCADE;
 DROP TABLE IF EXISTS movie CASCADE;
 DROP TABLE IF EXISTS useraccount CASCADE;
@@ -85,6 +86,19 @@ CREATE TABLE useraccount (
     PRIMARY KEY (email)
 );
 
+CREATE TABLE booking_has_show_by_user (
+    bookingid int NOT NULL,
+    numseats int NOT NULL,
+    status varchar(255) NOT NULL,
+    showdate date NOT NULL,
+    starttime time NOT NULL,
+    showid int NOT NULL,
+    email varchar(255) NOT NULL,
+    PRIMARY KEY (bookingid),
+    FOREIGN KEY(showid) REFERENCES show_played_movie(showid),
+    FOREIGN KEY(email) REFERENCES useraccount(email)
+);
+
 -- CREATE TABLE Payment (
 --     PaymentID varchar(255),
 --     BookingID varchar(255),
@@ -94,17 +108,6 @@ CREATE TABLE useraccount (
 --     PaymentMethod varchar(255),
 --     PRIMARY KEY(PaymentID),
 --     FOREIGN KEY(BookingID) REFERENCES Booking(BookingID)
--- );
-
--- CREATE TABLE Booking (
---     BookingID varchar(255),
--- 	ShowSeatID varchar(255),
--- 	Email varchar(255),
---     Status varchar(255),
---     NumSeats int,
---     BoookingDate DateTime,
--- 	PRIMARY KEY(BookingID),
--- 	FOREIGN KEY(ShowSeatID) REFERENCES ShowSeating(ShowSeatID)
 -- );
 
 -- CREATE TABLE PlayedIn (
