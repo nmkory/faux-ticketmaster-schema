@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS cinemaseating_has_cinematheater CASCADE;
 DROP TABLE IF EXISTS cinematheater_has_cinema CASCADE;
 DROP TABLE IF EXISTS cinema_has_city CASCADE;
 DROP TABLE IF EXISTS city CASCADE;
+DROP TABLE IF EXISTS showseating_has_show CASCADE;
+DROP TABLE IF EXISTS show_played_movie CASCADE;
 DROP TABLE IF EXISTS movie CASCADE;
 
 SELECT table_name
@@ -46,13 +48,31 @@ CREATE TABLE cinemaseating_has_cinematheater (
 CREATE TABLE movie (
     movieid int NOT NULL,
     description varchar(255) NOT NULL,
-    duration time NOT NULL,
+    duration interval NOT NULL,
     language varchar(255) NOT NULL,
     title varchar(255) NOT NULL,
     genre varchar(255) NOT NULL,
     country varchar(255) NOT NULL,
-    releasedate timestamp NOT NULL,
+    releasedate date NOT NULL,
     PRIMARY KEY (movieid)
+);
+
+CREATE TABLE show_played_movie (
+    showid int NOT NULL,
+    showdate date NOT NULL,
+    starttime time NOT NULL,
+    endtime time NOT NULL,
+    movieid int NOT NULL,
+    PRIMARY KEY (showid),
+    FOREIGN KEY(movieid) REFERENCES movie(movieid)
+);
+
+CREATE TABLE showseating_has_show (
+    showseatid int NOT NULL,
+    price money NOT NULL,
+    showid int NOT NULL,
+    PRIMARY KEY (showseatid),
+    FOREIGN KEY(showid) REFERENCES show_played_movie(showid)
 );
 
 -- CREATE TABLE Payment (
@@ -85,22 +105,6 @@ CREATE TABLE movie (
 --     Password varchar(255),
 -- 	PRIMARY KEY(Email)
 -- 	FOREIGN KEY(BookingID) REFERENCES Booking(BookingID)
--- );
--- CREATE TABLE ShowSeating (
---     ShowSeatID varchar(255),
---     Price int,
--- 	PRIMARY KEY(ShowSeatID)
--- );
--- CREATE TABLE Show (
---     ShowID varchar(255),
--- 	BookingID varchar(255),
--- 	ShowSeatID varchar(255),
---     StartTime varchar(255),
---     EndTime int,
---     ShowDate Date,
--- 	PRIMARY KEY(ShowID),
--- 	FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),
--- 	FOREIGN KEY (ShowSeatID) REFERENCES ShowSeating(ShowSeatID)
 -- );
 
 -- CREATE TABLE PlayedIn (
