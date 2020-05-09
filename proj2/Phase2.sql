@@ -109,7 +109,7 @@ CREATE TABLE payment_has_booking (
     amount money NOT NULL,
     paymentmethod varchar(255) NOT NULL,
     paymentdatetime timestamp NOT NULL,
-    bookingid int, --can be NULL
+    bookingid int NOT NULL,
     PRIMARY KEY (paymentid),
     FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid)
 );
@@ -130,7 +130,7 @@ CREATE TABLE found_in (
 
 CREATE TABLE seatbooked (
   bookingid int NOT NULL,
-  showseatid int,
+  showseatid int NOT NULL,
   FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid),
   FOREIGN KEY(showseatid) REFERENCES showseating_has_show(showseatid)
 );
