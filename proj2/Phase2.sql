@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS seatbooked CASCADE;
 DROP TABLE IF EXISTS found_in CASCADE;
 DROP TABLE IF EXISTS played_in CASCADE;
+DROP TABLE IF EXISTS booking_payment CASCADE;
 DROP TABLE IF EXISTS cinemaseating_has_cinematheater CASCADE;
 DROP TABLE IF EXISTS cinematheater_has_cinema CASCADE;
 DROP TABLE IF EXISTS cinema_has_city CASCADE;
@@ -112,6 +113,13 @@ CREATE TABLE payment_has_booking (
     bookingid int NOT NULL,
     PRIMARY KEY (paymentid),
     FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid)
+);
+
+CREATE TABLE booking_payment (
+  bookingid int, --can be NULL
+  paymentid int NOT NULL,
+  FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid),
+  FOREIGN KEY(paymentid) REFERENCES payment_has_booking(paymentid)
 );
 
 CREATE TABLE played_in (
