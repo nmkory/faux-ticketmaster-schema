@@ -1,102 +1,148 @@
-CREATE TABLE Payment (
-    PaymentID varchar(255),
-	BookingID varchar(255),
-    TransactionID varchar(255),
-    Amount int,
-    PaymentDate DateTime,
-    PaymentMethod varchar(255),
-	PRIMARY KEY(Payment),
-	FOREIGN KEY(BookingID), REFERENCES Booking(BookingID)
+DROP TABLE IF EXISTS seatbooked CASCADE;
+DROP TABLE IF EXISTS found_in CASCADE;
+DROP TABLE IF EXISTS played_in CASCADE;
+DROP TABLE IF EXISTS booking_payment CASCADE;
+DROP TABLE IF EXISTS cinemaseating_has_cinematheater CASCADE;
+DROP TABLE IF EXISTS cinematheater_has_cinema CASCADE;
+DROP TABLE IF EXISTS cinema_has_city CASCADE;
+DROP TABLE IF EXISTS city CASCADE;
+DROP TABLE IF EXISTS showseating_has_show CASCADE;
+DROP TABLE IF EXISTS payment_has_booking CASCADE;
+DROP TABLE IF EXISTS booking_has_show_by_user CASCADE;
+DROP TABLE IF EXISTS show_played_movie CASCADE;
+DROP TABLE IF EXISTS movie CASCADE;
+DROP TABLE IF EXISTS useraccount CASCADE;
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema='public';
+
+CREATE TABLE city (
+    cityid int NOT NULL,
+    name varchar(255) NOT NULL,
+    zipcode varchar(5) NOT NULL,
+    state varchar(255) NOT NULL,
+    PRIMARY KEY (cityid)
 );
-CREATE TABLE Booking (
-    BookingID varchar(255),
-	ShowSeatID varchar(255),
-	Email varchar(255),
-    Status varchar(255),
-    NumSeats int,
-    BoookingDate DateTime,
-	PRIMARY KEY(BookingID),
-	FOREIGN KEY(ShowSeatID) REFERENCES ShowSeating(ShowSeatID)
-);
-CREATE TABLE UserAccount (
-    Email varchar(255),
-	BookingID varchar(255),
-    FirstName varchar(255),
-    PhoneNum int,
-    LastName varchar(255),
-    Password varchar(255),
-	PRIMARY KEY(Email)
-	FOREIGN KEY(BookingID) REFERENCES Booking(BookingID)
-);
-CREATE TABLE ShowSeating (
-    ShowSeatID varchar(255),
-    Price int,
-	PRIMARY KEY(ShowSeatID)
-);
-CREATE TABLE Show (
-    ShowID varchar(255),
-	BookingID varchar(255),
-	ShowSeatID varchar(255),
-    StartTime varchar(255),
-    EndTime int,
-    ShowDate Date,
-	PRIMARY KEY(ShowID),
-	FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),
-	FOREIGN KEY (ShowSeatID) REFERENCES ShowSeating(ShowSeatID)
-);
-CREATE TABLE Movie (
-    MovieID varchar(255),
-	ShowID varchar(255),
-    Description varchar(255),
-    Title int,
-    Genre varchar(255),
-    Country varchar(255)
-	ReleaseDate DateTime(255),
-    Duration varchar(255),
-	MovieLanguage varchar(255),
-	PRIMARY KEY (MovieID),
-	FOREIGN KEY (ShowID) REFERENCES Show(ShowID)
-);
-CREATE TABLE Cinema (
-    CinemaID varchar(255),
-	CINEMATID varchar(255),
-    Name varchar(255),
-    TotalCinema int,
-	PRIMARY KEY(CinemaID),
-	FOREIGN KEY(CINEMATID) REFERENCES CinemaT(CinemaTID)
-);
-CREATE TABLE CinemaT (
-    CinemaTID varchar(255),
-    TotalSeatNum varchar(255),
-    CTName varchar(255),
-	PRIMARY KEY(CINEMATID)
-);
-CREATE TABLE CinemaSeat (
-    CinemaSID varchar(255),
-	CINEMATID varchar(255),
-	ShowSeatID varchar(255),
-    CSType varchar(255),
-    SeatNum int,
-	PRIMARY KEY(CinemaSID),
-	FOREIGN KEY(CINEMATID) REFERENCES CinemaT(CINEMATID),
-	FOREIGN KEY(ShowSeatID) REFERENCES ShowSeating(ShowSeatID)
-);
-CREATE TABLE City (
-    CityID varchar(255),
-	CinemaID varchar(255),
-    Name varchar(255),
-    ZipCode int,
-    CState varchar(255),
-	PRIMARY KEY(CityID),
-	FOREIGN KEY(CinemaID) REFERENCES Cinema(CinemaID)
-);
-CREATE TABLE PlayedIn (
-	ShowID varchar(255),
-	CINEMATID varchar(255),
-	PRIMARY KEY(ShowID,CINEMATID),
-	FOREIGN KEY(ShowID) REFERENCES Show(ShowID),
-	FOREIGN KEY(CINEMATID) REFERENCES CinemaT(CINEMATID)
+--
+CREATE TABLE cinema_has_city (
+    cinemaid int NOT NULL,
+    cityid int NOT NULL,
+    name varchar(255) NOT NULL,
+    totalcinematheaters int NOT NULL,
+    PRIMARY KEY(cinemaid),
+    FOREIGN KEY(cityid) REFERENCES city(cityid)
 );
 
+CREATE TABLE cinematheater_has_cinema (
+    cinematheaterid int NOT NULL,
+    cinemaid int NOT NULL,
+    totalseatnum int NOT NULL,
+    theatername varchar(255) NOT NULL,
+    PRIMARY KEY(cinematheaterid),
+    FOREIGN KEY(cinemaid) REFERENCES cinema_has_city(cinemaid)
+);
 
+CREATE TABLE cinemaseating_has_cinematheater (
+    cinemaseatid int NOT NULL,
+    seatnumber int NOT NULL,
+    type varchar(255) NOT NULL,
+    cinematheaterid int NOT NULL,
+    PRIMARY KEY(cinemaseatid),
+    FOREIGN KEY(cinematheaterid) REFERENCES cinematheater_has_cinema(cinematheaterid)
+);
 
+CREATE TABLE movie (
+    movieid int NOT NULL,
+    description varchar(255) NOT NULL,
+    duration interval NOT NULL,
+    language varchar(255) NOT NULL,
+    title varchar(255) NOT NULL,
+    genre varchar(255) NOT NULL,
+    country varchar(255) NOT NULL,
+    releasedate date NOT NULL,
+    PRIMARY KEY (movieid)
+);
+
+CREATE TABLE show_played_movie (
+    showid int NOT NULL,
+    showdate date NOT NULL,
+    starttime time NOT NULL,
+    endtime time NOT NULL,
+    movieid int NOT NULL,
+    PRIMARY KEY (showid),
+    FOREIGN KEY(movieid) REFERENCES movie(movieid)
+);
+
+CREATE TABLE showseating_has_show (
+    showseatid int NOT NULL,
+    price money NOT NULL,
+    showid int NOT NULL,
+    PRIMARY KEY (showseatid),
+    FOREIGN KEY(showid) REFERENCES show_played_movie(showid)
+);
+
+CREATE TABLE useraccount (
+    email varchar(255) NOT NULL,
+    firstname varchar(255) NOT NULL,
+    lastname varchar(255) NOT NULL,
+    phone varchar(10) NOT NULL,
+    password varchar(255) NOT NULL,
+    PRIMARY KEY (email)
+);
+
+CREATE TABLE booking_has_show_by_user (
+    bookingid int NOT NULL,
+    numseats int NOT NULL,
+    status varchar(255) NOT NULL,
+    showdate date NOT NULL,
+    starttime time NOT NULL,
+    showid int NOT NULL,
+    email varchar(255) NOT NULL,
+    PRIMARY KEY (bookingid),
+    FOREIGN KEY(showid) REFERENCES show_played_movie(showid),
+    FOREIGN KEY(email) REFERENCES useraccount(email)
+);
+
+CREATE TABLE payment_has_booking (
+    paymentid int NOT NULL,
+    transactionid int, --can be NULL
+    amount money NOT NULL,
+    paymentmethod varchar(255) NOT NULL,
+    paymentdatetime timestamp NOT NULL,
+    bookingid int NOT NULL,
+    PRIMARY KEY (paymentid),
+    FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid)
+);
+
+CREATE TABLE booking_payment (
+  bookingid int, --can be NULL
+  paymentid int NOT NULL,
+  FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid),
+  FOREIGN KEY(paymentid) REFERENCES payment_has_booking(paymentid)
+);
+
+CREATE TABLE played_in (
+    showid int NOT NULL,
+    cinematheaterid int NOT NULL,
+    FOREIGN KEY(showid) REFERENCES show_played_movie(showid),
+    FOREIGN KEY(cinematheaterid) REFERENCES cinematheater_has_cinema(cinematheaterid)
+);
+
+CREATE TABLE found_in (
+    showseatid int NOT NULL,
+    cinemaseatid int NOT NULL,
+    FOREIGN KEY(showseatid) REFERENCES showseating_has_show(showseatid),
+    FOREIGN KEY(cinemaseatid) REFERENCES cinemaseating_has_cinematheater(cinemaseatid)
+);
+
+CREATE TABLE seatbooked (
+  bookingid int NOT NULL,
+  showseatid int NOT NULL,
+  FOREIGN KEY(bookingid) REFERENCES booking_has_show_by_user(bookingid),
+  FOREIGN KEY(showseatid) REFERENCES showseating_has_show(showseatid)
+);
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema='public';
