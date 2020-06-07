@@ -361,7 +361,7 @@ public class Ticketmaster{
 			}//end try
 		}while (true);
 
-    String query = ("SELECT c.cname, t.tname\n" +
+    String query = ("SELECT c.*, t.*\n" +
                     "FROM plays p, cinemas c, theaters t\n" +
                     "WHERE p.sid = " + sid + "\n"+
                     "AND p.tid = t.tid\n" +
