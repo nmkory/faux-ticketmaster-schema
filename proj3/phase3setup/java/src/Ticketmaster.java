@@ -361,10 +361,10 @@ public class Ticketmaster{
 			}//end try
 		}while (true);
 
-    String query = ("SELECT c.cname, t.tname " +
-                    "FROM plays p, cinemas c, theaters t "+
-                    "WHERE p.sid = " + sid + " "+
-                    "AND p.tid = t.tid " +
+    String query = ("SELECT c.cname, t.tname\n" +
+                    "FROM plays p, cinemas c, theaters t\n" +
+                    "WHERE p.sid = " + sid + "\n"+
+                    "AND p.tid = t.tid\n" +
                     "AND t.tid = c.cid;");
 
     try {
