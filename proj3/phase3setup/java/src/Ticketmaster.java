@@ -376,15 +376,15 @@ public class Ticketmaster{
       System.out.print("Please enter user's first name: ");
       try {
         fname = in.readLine();
-        if (fname.length() > 32) {
-          System.out.println("User's first name is too long.");
+        if (fname.length() > 32 || fname.length() == 0) {
+          System.out.println("User's first name is too long or too short.");
           continue;
         }
 
         System.out.print("Please enter user's last name: ");
         lname = in.readLine();
-        if (lname.length() > 32) {
-          System.out.println("User's last name is too long.");
+        if (lname.length() > 32 || lname.length() == 0) {
+          System.out.println("User's last name is too long or too short.");
           continue;
         }
 
@@ -401,17 +401,42 @@ public class Ticketmaster{
       System.out.print("Please enter user's phone number: ");
       try { // read the integer, parse it and break.
         phone = in.readLine();
-        if (phone.length() != 10 || Long.parseLong(phone) < 1) {
+        if (phone.length() != 10 || Long.parseLong(phone) < 0) {
           System.out.println("Your input is invalid!");
           continue;
         }
+        break;
+      }catch (Exception e) {
+        System.out.println("Your input is invalid! Enter a 10 digit number with no characters.");
+        e.printStackTrace();
+        continue;
+      }//end try
+    }  // End of capture phone Number
+
+    // Capture user password
+    while (true) {
+      System.out.print("Please enter user's password: ");
+      try { // read the integer, parse it and break.
+        in.readLine();
         break;
       }catch (Exception e) {
         System.out.println("Your input is invalid!");
         e.printStackTrace();
         continue;
       }//end try
+    }  // End of capture user password
+
+    // Build insert user query
+    String query = ("INSERT INTO Users(email, lname, fname, phone, pwd)\n" +
+                     "VALUES ('"+ email + "', '"+ lname + "', '"+ fname +"', '"+ phone +"', '"+ pwd + "');");
+
+    try {
+     esql.executeUpdate(query);
+    } catch (SQLException e){
+     e.printStackTrace();
     }
+    System.out.println();
+    return;
 
   }  //AddUser()
 
