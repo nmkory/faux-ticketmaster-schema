@@ -35,7 +35,6 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.format.ResolverStyle;
 import java.util.regex.*;
-import java.lang.Integer;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -330,7 +329,6 @@ public class Ticketmaster{
     return input;
   }//end readChoice
 
-
   public static void AddUser(Ticketmaster esql){//1
     String email;
     String lname;
@@ -369,58 +367,7 @@ public class Ticketmaster{
         continue;
       }//end try
     }while (true);
-
-    while(true){
-      System.out.print("Please Enter Last Name:");
-      try
-      {
-        lname=in.readLine();
-        if (lname.length() <= 0 || lname.length() > 32)
-        {
-          throw new RuntimeException("Invalid Entry:lname must not be empty or greater than 32 characters");
-        }
-        break;
-      }
-      catch (Exception e){
-        System.out.println("Invalid Input: Exception:"+e.getMessage());
-        continue;
-      }
-    }
-    while(true){
-      System.out.print("Please Enter Fist Name Name:");
-      try
-      {
-        fname=in.readLine();
-        if (fname.length() <= 0 || fname.length() > 32)
-        {
-          throw new RuntimeException("Invalid Entry:fname must not be empty or greater than 32 characters");
-        }
-        break;
-      }
-      catch (Exception e){
-        System.out.println("Invalid Input: Exception"+e.getMessage());
-        continue;
-      }
-    }
-
-    while(true){
-      System.out.print("Please Enter Valid Phone Number (10 Characters)");
-      try
-      {
-        phone=in.readLine();
-        if (phone.length() <= 0 || phone.length() !=10 || phone.matches("[0-9]+"))
-        {
-          throw new RuntimeException("Invalid Entry:phone number must not be empty and equal to 10 digits");
-        }
-        break;
-      }
-      catch (Exception e){
-        System.out.println("Invalid Number Exception: Exception"+ e.getMessage());
-        continue;
-      }
-    }
-
-  }//eo esql1
+  }
 
   public static void AddBooking(Ticketmaster esql){//2
 
