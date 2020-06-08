@@ -525,7 +525,7 @@ public class Ticketmaster{
 
     while (true) {
       System.out.print("Please enter user's email address: ");
-      try { // read the integer, parse it and break.
+      try {
         email = in.readLine();
         break;
       } catch (Exception e) {
@@ -535,7 +535,23 @@ public class Ticketmaster{
       }//end try
     } //end while
 
+    String query = ("SELECT m.title, s.sdate, s.sttime, t.tname, c.sno\n" +
+                    "FROM Users u, Bookings b, Shows s, Movies m, Plays p, Theaters t, CinemaSeats c\n" +
+                    "WHERE u.email = '" + email + "'\n" +
+                    "AND u.email = b.email\n" +
+                    "AND b.sid = s.sid\n" +
+                    "AND s.mvid = m.mvid\n" +
+                    "AND b.sid = p.sid\n" +
+                    "AND p.tid = t.tid\n" +
+                    "AND p.tid = c.tid;");
 
+    try {
+      esql.executeQueryAndPrintResult(query);
+    } catch (SQLException e){
+      e.printStackTrace();
+    }
+    System.out.println();
+    return;
   }
 
 }
