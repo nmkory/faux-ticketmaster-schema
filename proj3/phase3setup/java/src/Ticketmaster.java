@@ -23,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -377,7 +379,37 @@ public class Ticketmaster{
 	}
 
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
-		//
+    //
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    LocalDateTime dateTime = null;
+    //formatter.setLenient(false);
+		System.out.println();
+
+		while (true) {
+			System.out.print("Please enter show date and start time in 'yyyy-MM-dd HH:mm' format: ");
+			try { // read the integer, parse it and break.
+				dateTime = LocalDateTime.parse(in.readLine(), formatter);
+        break;
+			} catch (Exception e) {
+				System.out.println("Your input is invalid!");
+        System.out.println("Make sure the format is correct and the date and time actually exist.");
+        e.printStackTrace();
+				continue;
+			}//end try
+		} //end while
+
+    String query = ("SELECT *\n" +
+                    "FROM Shows\n" +
+                    "WHERE sdate = '" + dateTime.getYear() + "-" + String.format("%02d", dateTime.getMonthValue()) + "-" + String.format("%02d", dateTime.getDayOfMonth()) + "'\n" +
+                    "AND sttime = '" + String.format("%02d", dateTime.getHour()) + ":" + String.format("%02d", dateTime.getMinute()) + ":00';");
+
+    try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (SQLException e){
+	    e.printStackTrace();
+		}
+    System.out.println();
+    return;
 
 	}
 
