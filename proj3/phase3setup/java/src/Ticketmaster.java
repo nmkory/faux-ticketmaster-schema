@@ -462,6 +462,8 @@ public class Ticketmaster{
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
     LocalDate startDate = null;
     LocalDate endDate = null;
+    int mid;
+    int cid;
 
     while (true) {
       System.out.print("Please enter starting date range (inclusive) 'yyyy-MM-dd HH:mm' format: ");
@@ -484,10 +486,28 @@ public class Ticketmaster{
       }//end try
     } //end while
 
+    do {
+      System.out.print("Please enter movie mid: ");
+      try { // read the integer, parse it and break.
+        mid = Integer.parseInt(in.readLine());
+        System.out.print("Please enter cinema cid: ");
+        cid = Integer.parseInt(in.readLine());
+        break;
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    }while (true);
+
     String query = ("SELECT m.title, m.duration, s.sdate, s.sttime\n" +
-                    "FROM Movies m, Shows s\n" +
+                    "FROM Movies m, Shows s, Theaters t, Plays p\n" +
                     "WHERE s.sdate >= '" + startDate.getYear() + "-" + String.format("%02d", startDate.getMonthValue()) + "-" + String.format("%02d", startDate.getDayOfMonth()) + "'\n" +
                     "AND s.sdate <= '" + endDate.getYear() + "-" + String.format("%02d", endDate.getMonthValue()) + "-" + String.format("%02d", endDate.getDayOfMonth()) + "'\n" +
+                    "AND m.mvid = " + mid + "\n" +
+                    "AND t.cid = " + cid + "\n" +
+                    "AND t.tid = p.tid\n" +
+                    "AND p.sid = s.sid\n" +
                     "AND s.mvid = m.mvid;");
     try {
       esql.executeQueryAndPrintResult(query);
@@ -500,6 +520,21 @@ public class Ticketmaster{
 
   public static void ListBookingInfoForUser(Ticketmaster esql){//14
     //
+    String email;
+    System.out.println();
+
+    while (true) {
+      System.out.print("Please enter user's email address: ");
+      try { // read the integer, parse it and break.
+        email = in.readLine();
+        break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    } //end while
+
 
   }
 
