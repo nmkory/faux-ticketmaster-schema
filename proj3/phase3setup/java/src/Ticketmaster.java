@@ -338,20 +338,23 @@ public class Ticketmaster{
 
     System.out.println();
 
-    do {
+    // Capture email
+    while (true) {
       System.out.print("Please enter the user email: ");
-      try { // read the integer, parse it and break.
+      try { // read the email, parse it and break if valid.
         email = in.readLine();
+        // primary key, need to see if it already exists in DB
         if (esql.executeQuery("SELECT * FROM Users WHERE email = '" + email + "';") != 0) {
           System.out.println("This user is already in the system.");
           continue;
         }
-
+        // need to make sure length is correct
         if (email.length() > 64) {
           System.out.println("Email address is too long.");
           continue;
         }
 
+        // check if valid email address
         // Regex email validation taken from
         // https://howtodoinjava.com/regex/java-regex-validate-email-address/
         Matcher matcher = pattern.matcher(email);
@@ -361,13 +364,56 @@ public class Ticketmaster{
           continue;
         }
 
-        break;
+        break; //break if made it through validation checks
       }catch (Exception e) {
         System.out.println("Your input is invalid!");
         continue;
       }//end try
-    }while (true);
-  }
+    }  //end of email input
+
+    // Capture names
+    while (true) {
+      System.out.print("Please enter user's first name: ");
+      try {
+        fname = in.readLine();
+        if (fname.length() > 32) {
+          System.out.println("User's first name is too long.");
+          continue;
+        }
+
+        System.out.print("Please enter user's last name: ");
+        lname = in.readLine();
+        if (lname.length() > 32) {
+          System.out.println("User's last name is too long.");
+          continue;
+        }
+
+        break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    } //end of capture names
+
+    // Capture phone Number
+    while (true) {
+      System.out.print("Please enter user's phone number: ");
+      try { // read the integer, parse it and break.
+        phone = in.readLine();
+        if (phone.length() != 10 || Long.parseLong(phone) < 1) {
+          System.out.println("Your input is invalid!");
+          continue;
+        }
+        break;
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    }
+
+  }  //AddUser()
 
   public static void AddBooking(Ticketmaster esql){//2
 
