@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.format.ResolverStyle;
+import java.util.regex.*;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -45,6 +46,11 @@ public class Ticketmaster{
   //reference to physical database connection
   private Connection _connection = null;
   static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+  // Regex email validation taken from:
+  // https://howtodoinjava.com/regex/java-regex-validate-email-address/
+  static final String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+  static final Pattern pattern = Pattern.compile(regex);
 
   public Ticketmaster(String dbname, String dbport, String user, String passwd) throws SQLException {
     System.out.print("Connecting to database...");
@@ -324,7 +330,43 @@ public class Ticketmaster{
   }//end readChoice
 
   public static void AddUser(Ticketmaster esql){//1
+    String email;
+    String lname;
+    String fname;
+    String phone;
+    String pwd = "ef72bf374c890b969714a7e881ca3cf5d1dff44a238cce65286b039345ef1303";
 
+    System.out.println();
+
+    do {
+      System.out.print("Please enter the user email: ");
+      try { // read the integer, parse it and break.
+        email = in.readLine();
+        if (esql.executeQuery("SELECT * FROM Users WHERE email = '" + email + "';") != 0) {
+          System.out.println("This user is already in the system.");
+          continue;
+        }
+
+        if (email.length() > 64) {
+          System.out.println("Email address is too long.");
+          continue;
+        }
+
+        // Regex email validation taken from
+        // https://howtodoinjava.com/regex/java-regex-validate-email-address/
+        Matcher matcher = pattern.matcher(email);
+
+        if(matcher.matches() == false) {
+          System.out.println("Invalid email address.");
+          continue;
+        }
+
+        break;
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        continue;
+      }//end try
+    }while (true);
   }
 
   public static void AddBooking(Ticketmaster esql){//2

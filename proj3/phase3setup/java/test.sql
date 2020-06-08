@@ -1,11 +1,4 @@
-SELECT m.title, s.sdate, s.sttime, t.tname, c.sno
-FROM Users u, Bookings b, Shows s, Movies m, Plays p, Theaters t, CinemaSeats c
-WHERE u.email = 'sharitamedellin@gmail.com'
-AND u.email = b.email
-AND b.sid = s.sid
-AND s.mvid = m.mvid
-AND b.sid = p.sid
-AND p.tid = t.tid
-AND p.tid = c.tid;
+-- INSERT INTO Users(email, lname, fname, phone, pwd) VALUES ('nmkorry@gmail.com', 'Kory', 'Nicholas', '0053413061', '25ddfc08640f7315476018d35d5cac5207e775c4c0d0a18491ef5686fd5ac091');
 
---SELECT * FROM CinemaSeats;
+SELECT * FROM Users
+WHERE email = 'nmkorry@gmail.com';
