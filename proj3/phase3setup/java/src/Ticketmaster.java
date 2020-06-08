@@ -416,7 +416,18 @@ public class Ticketmaster{
 
 	public static void ListMovieTitlesContainingLoveReleasedAfter2010(Ticketmaster esql){//11
 		//
+    String query = ("SELECT DISTINCT title\n" +
+                    "FROM Movies\n" +
+                    "WHERE rdate > '2010-12-31'\n" +
+                    "AND title ILIKE '%love%';");
 
+    try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (SQLException e){
+	    e.printStackTrace();
+		}
+    System.out.println();
+    return;
 	}
 
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
