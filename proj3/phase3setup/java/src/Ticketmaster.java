@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.ResolverStyle;
 
 /**
@@ -448,7 +449,9 @@ public class Ticketmaster{
 
 	public static void ListMovieAndShowInfoAtCinemaInDateRange(Ticketmaster esql){//13
 		//
-
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
+    LocalDate startDate = null;
+    LocalDate endDate = null;
 	}
 
 	public static void ListBookingInfoForUser(Ticketmaster esql){//14
