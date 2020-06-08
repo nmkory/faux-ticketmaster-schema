@@ -1,9 +1,16 @@
 /*
- * Template JAVA User Interface
+ * Submission for CS166 Project Phase 3: Implementation
  * =============================
+ * Nicholas Kory
+ * ID 862-18-9331
+ * nkory003@ucr.edu
+ *
+ * Bryan Parada
+ * ID 861-02-7456
+ * bpara001@ucr.edu
  *
  * Database Management Systems
- * Department of Computer Science &amp; Engineering
+ * Department of Computer Science and Engineering
  * University of California - Riverside
  *
  * Target DBMS: 'Postgres'
