@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.format.ResolverStyle;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -380,9 +381,9 @@ public class Ticketmaster{
 
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
     //
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").withResolverStyle(ResolverStyle.STRICT);
     LocalDateTime dateTime = null;
-    //formatter.setLenient(false);
+
 		System.out.println();
 
 		while (true) {
