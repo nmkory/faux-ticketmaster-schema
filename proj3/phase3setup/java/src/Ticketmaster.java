@@ -417,6 +417,7 @@ public class Ticketmaster{
 
 	public static void ListMovieTitlesContainingLoveReleasedAfter2010(Ticketmaster esql){//11
 		//
+    System.out.println();
     String query = ("SELECT DISTINCT title\n" +
                     "FROM Movies\n" +
                     "WHERE rdate > '2010-12-31'\n" +
@@ -433,6 +434,7 @@ public class Ticketmaster{
 
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
 		//
+    System.out.println();
     String query = ("SELECT DISTINCT u.fname, u.lname, u.email\n" +
                     "FROM Users u, Bookings b\n" +
                     "WHERE b.status = 'Pending'\n" +
@@ -449,9 +451,44 @@ public class Ticketmaster{
 
 	public static void ListMovieAndShowInfoAtCinemaInDateRange(Ticketmaster esql){//13
 		//
+    System.out.println();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
     LocalDate startDate = null;
     LocalDate endDate = null;
+
+    while (true) {
+			System.out.print("Please enter starting date range (inclusive) 'yyyy-MM-dd HH:mm' format: ");
+			try { // read the integer, parse it and break.
+				startDate = LocalDate.parse(in.readLine(), formatter);
+        System.out.print("Please enter ending date range (inclusive) 'yyyy-MM-dd HH:mm' format: ");
+        endDate = LocalDate.parse(in.readLine(), formatter);
+
+        if (endDate.isBefore(startDate)) {
+          System.out.println("The ending date cannot come before the starting date.");
+          continue;
+        }
+
+        break;
+			} catch (Exception e) {
+				System.out.println("Your input is invalid!");
+        System.out.println("Make sure the format is correct and the dates actually exist.");
+        e.printStackTrace();
+				continue;
+			}//end try
+		} //end while
+
+    String query = ("SELECT m.title, m.duration, s.sdate, s.sttime\n" +
+                    "FROM Movies m, Shows s\n" +
+                    "WHERE s.sdate >= '" + startDate.getYear() + "-" + String.format("%02d", startDate.getMonthValue()) + "-" + String.format("%02d", startDate.getDayOfMonth()) + "'\n" +
+                    "AND s.sdate <= '" + endDate.getYear() + "-" + String.format("%02d", endDate.getMonthValue()) + "-" + String.format("%02d", endDate.getDayOfMonth()) + "'\n" +
+                    "AND s.mvid = m.mvid;");
+    try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (SQLException e){
+	    e.printStackTrace();
+		}
+    System.out.println();
+    return;
 	}
 
 	public static void ListBookingInfoForUser(Ticketmaster esql){//14
