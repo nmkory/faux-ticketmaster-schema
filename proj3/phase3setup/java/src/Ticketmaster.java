@@ -885,17 +885,15 @@ public class Ticketmaster{
 
      System.out.println("Current seats: " + currentSeats);
      System.out.println("Which new cinema seats for the booking. Here is what is available: " + availableSeats);
-     int numSeats = currentSeats.size();
+     final int numSeats = currentSeats.size();
      System.out.println("Current num seats: " + numSeats);
 
      //Get seats from User
-     while (true) {
-       System.out.println("Enter -1 when done.");
+     while (seatsToAdd.size() < numSeats) {
+       System.out.println(numSeats - seatsToAdd.size() + " seat(s) left to add.");
        System.out.print("Enter cinema seats csid: ");
        try { // read the integer, parse it and break.
          int tempCSID = Integer.parseInt(in.readLine());
-         if (tempCSID == -1)
-           break;
          if (!seats.contains(tempCSID)) {
            System.out.println("That is not an available seat.");
            continue;
@@ -913,6 +911,18 @@ public class Ticketmaster{
        }//end try
      } // end of while getting seats from user
 
+     // Change seats
+     try {
+       for (int i = 0; i < seatsToAdd.size(); i++) {
+        esql.executeUpdate("UPDATE ShowSeats\n" +
+                           "SET csid = " + seatsToAdd.get(i) + "\n" +
+                           "WHERE bid = " + bid + "\n" +
+                           "AND csid = " + currentSeats.get(i).get(i) + ";");
+       }
+     } catch (Exception e) {
+       e.printStackTrace();
+     }//end try
+     System.out.println("Seats changed to " + );
 
 
     System.out.println();
