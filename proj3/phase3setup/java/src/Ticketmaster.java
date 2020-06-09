@@ -441,8 +441,47 @@ public class Ticketmaster{
   }  //AddUser()
 
   public static void AddBooking(Ticketmaster esql){//2
+    String email;
+    int sid;
+    System.out.println();
 
-  }
+    // Capture email
+    while (true) {
+      System.out.print("Please enter the user email: ");
+      try { // read the email, parse it and break if valid.
+        email = in.readLine();
+        // primary key, need to see if it already exists in DB
+        if (esql.executeQuery("SELECT * FROM Users WHERE email = '" + email + "';") != 1) {
+          System.out.println("This user is not in our system.");
+          continue;
+        }
+        break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        continue;
+      } //end try
+    }// end of capture email while
+
+    //Capture show ID
+    while (true) {
+      System.out.print("Please enter show sid: ");
+      try { // read the integer, parse it and break.
+        sid = Integer.parseInt(in.readLine());
+        if (esql.executeQuery("SELECT * FROM Shows WHERE sid = " + sid + ";") != 1) {
+          System.out.println("This show id is not valid in our system.");
+          continue;
+        }
+        break;
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    }// end of capture sid
+
+    System.out.println();
+    return;
+  }  //AddBooking()
 
   public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 
