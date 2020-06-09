@@ -653,6 +653,38 @@ public class Ticketmaster{
 
   public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 
+    System.out.println();
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
+    LocalDate releaseDate = null;
+    LocalDate startDate = null;
+
+    // get dates
+    while (true) {
+      System.out.print("Please enter movie release date in 'yyyy-MM-dd HH:mm' format: ");
+      try { // read the integer, parse it and break.
+        releaseDate = LocalDate.parse(in.readLine(), formatter);
+        System.out.print("Please enter show start date in 'yyyy-MM-dd HH:mm' format: ");
+        startDate = LocalDate.parse(in.readLine(), formatter);
+
+        if (startDate.isBefore(releaseDate)) {
+          System.out.println("The start date cannot come before the release date.");
+          continue;
+        }
+
+        break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        System.out.println("Make sure the format is correct and the dates actually exist.");
+        e.printStackTrace();
+        continue;
+      }//end try
+    } //end while
+
+
+
+    System.out.println();
+    return;
   }
 
   public static void CancelPendingBookings(Ticketmaster esql){//4
