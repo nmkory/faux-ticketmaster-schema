@@ -632,7 +632,14 @@ public class Ticketmaster{
     if (amount < 1)
       amount = 0;
 
+    String newBookingQuery = ("INSERT INTO Bookings(bid, status, bdatetime, seats, sid, email)\n" +
+                              "VALUES ((SELECT nextval('bid_sequence')), '" + status + "', '" + dateTime.getYear() + "-" + String.format("%02d", dateTime.getMonthValue()) + "-" + String.format("%02d", dateTime.getDayOfMonth()) + "', " + seatsToAdd.size() + ", " + sid + ", '" + email + "');");
 
+    try {
+     esql.executeUpdate(newBookingQuery);
+    } catch (SQLException e){
+     e.printStackTrace();
+    }
 
 
     System.out.println();

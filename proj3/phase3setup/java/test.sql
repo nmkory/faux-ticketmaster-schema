@@ -41,23 +41,25 @@
 -- SELECT MAX(bid)
 -- FROM Bookings;
 
+
+-- DROP SEQUENCE IF EXISTS bid_sequence;
+-- DROP SEQUENCE IF EXISTS sid_sequence;
+-- DROP SEQUENCE IF EXISTS pid_sequence;
+-- DROP SEQUENCE IF EXISTS ssid_sequence;
+-- DROP SEQUENCE IF EXISTS mvid_sequence;
+-- CREATE SEQUENCE bid_sequence;
+-- CREATE SEQUENCE sid_sequence;
+-- CREATE SEQUENCE pid_sequence;
+-- CREATE SEQUENCE ssid_sequence;
+-- CREATE SEQUENCE mvid_sequence;
+-- SELECT setval('bid_sequence', (SELECT MAX(bid) FROM Bookings));
+-- SELECT setval('sid_sequence', (SELECT MAX(sid) FROM Shows));
+-- SELECT setval('pid_sequence', (SELECT MAX(pid) FROM Payments));
+-- SELECT setval('ssid_sequence', (SELECT MAX(ssid) FROM ShowSeats));
+-- SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
 -- INSERT INTO Bookings(bid, status, bdatetime, seats, sid, email)
--- VALUES ((SELECT max(bid)+1 FROM Bookings), 'Pending', '2020-10-10', 1, 2, 'nmkory@gmail.com');
-DROP SEQUENCE IF EXISTS bid_sequence;
-DROP SEQUENCE IF EXISTS sid_sequence;
-DROP SEQUENCE IF EXISTS pid_sequence;
-DROP SEQUENCE IF EXISTS ssid_sequence;
-DROP SEQUENCE IF EXISTS mvid_sequence;
-CREATE SEQUENCE bid_sequence;
-CREATE SEQUENCE sid_sequence;
-CREATE SEQUENCE pid_sequence;
-CREATE SEQUENCE ssid_sequence;
-CREATE SEQUENCE mvid_sequence;
-SELECT setval('bid_sequence', (SELECT MAX(bid) FROM Bookings));
-SELECT setval('sid_sequence', (SELECT MAX(sid) FROM Shows));
-SELECT setval('pid_sequence', (SELECT MAX(pid) FROM Payments));
-SELECT setval('ssid_sequence', (SELECT MAX(ssid) FROM ShowSeats));
-SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
+-- VALUES ((SELECT nextval('bid_sequence')), 'Pending', '2020-10-10', 1, 2, 'nmkory@gmail.com');
+SELECT * FROM Bookings WHERE status = 'Paid';
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';
