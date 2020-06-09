@@ -449,10 +449,13 @@ public class Ticketmaster{
   }
 
   public static void CancelPendingBookings(Ticketmaster esql){//4
-        System.out.println();
-    String query= "UPDATE Bookings SET status = 'Cancelled' WHERE status='Pending'";
+    System.out.println();
+
+    String deleteShowSeatQuery = "DELETE FROM ShowSeats WHERE bid IN (SELECT bid FROM Bookings WHERE status = 'Pending');";
+    String updateBookingQuery= "UPDATE Bookings SET status = 'Cancelled' WHERE status='Pending';";
     try {
-        esql.executeUpdate(query);
+        esql.executeUpdate(deleteShowSeatQuery);
+        esql.executeUpdate(updateBookingQuery);
         System.out.println("Update made.");
 
     }catch(Exception e){
