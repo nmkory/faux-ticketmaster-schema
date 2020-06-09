@@ -758,7 +758,16 @@ public class Ticketmaster{
           continue;
         }
 
-
+        if (esql.executeQuery("SELECT *\n" +
+                              "FROM Shows s, Plays p\n" +
+                              "WHERE s.sdate = '" + startDate.getYear() + "-" + String.format("%02d", startDate.getMonthValue()) + "-" + String.format("%02d", startDate.getDayOfMonth()) + "'\n" +
+                              "AND s.sid = p.sid\n" +
+                              "AND p.tid = " + tid + "\n" +
+                              "AND ((s.sttime BETWEEN '" + String.format("%02d", startTime.getHour()) + ":" + String.format("%02d", startTime.getMinute()) + ":00' AND '" + String.format("%02d", endTime.getHour()) + ":" + String.format("%02d", endTime.getMinute()) + ":00') OR (s.edtime BETWEEN '" + String.format("%02d", startTime.getHour()) + ":" + String.format("%02d", startTime.getMinute()) + ":00' AND '" + String.format("%02d", endTime.getHour()) + ":" + String.format("%02d", endTime.getMinute()) + ":00'));") != 0) {
+          System.out.println("A show is already booked for that theater at that time.");
+          System.out.println();
+          continue;
+        }
         break;
       }catch (Exception e) {
         System.out.println("Your input is invalid!");

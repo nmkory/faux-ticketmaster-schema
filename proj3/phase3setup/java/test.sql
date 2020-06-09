@@ -63,9 +63,18 @@
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
 
 SELECT *
-FROM Shows
-WHERE sdate = '01-01-2019'
-AND tid =
+FROM Shows s, Plays p
+WHERE s.sdate = '01-01-2019'
+AND s.sid = p.sid
+AND p.tid = 633
+AND ((s.sttime BETWEEN '08:26:00' AND '09:25:00') OR (s.edtime BETWEEN '08:26:00' AND '09:40:00'))
+-- UNION
+-- SELECT *
+-- FROM Shows s, Plays p
+-- WHERE s.sdate = '01-01-2019'
+-- AND s.sid = p.sid
+-- AND p.tid = 633
+-- AND s.edtime BETWEEN '08:26:00' AND '09:40:00';
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';
