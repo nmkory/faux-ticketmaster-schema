@@ -22,22 +22,42 @@
 -- SELECT * FROM Bookings LIMIT 3;
 -- SELECT * FROM Shows WHERE sid = 1;
 -- SELECT * FROM Plays W 3;
-SELECT m.title, s.sdate, s.sttime, t.tname, t.tid
-FROM  Shows s, Movies M, Theaters t, Plays p
-WHERE s.sid = 2
-AND s.mvid = m.mvid
-AND s.sid = p.sid
-AND p.tid = t.tid;
+-- SELECT m.title, s.sdate, s.sttime, t.tname, t.tid
+-- FROM  Shows s, Movies M, Theaters t, Plays p
+-- WHERE s.sid = 2
+-- AND s.mvid = m.mvid
+-- AND s.sid = p.sid
+-- AND p.tid = t.tid;
+--
+-- SELECT cs.sno, cs.csid
+-- FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs
+-- WHERE s.sid = 2
+-- AND s.mvid = m.mvid
+-- AND s.sid = p.sid
+-- AND p.tid = t.tid
+-- AND p.tid = cs.tid;
+--
+-- SELECT * FROM Payments LIMIT 3;
+-- SELECT MAX(bid)
+-- FROM Bookings;
 
-SELECT cs.sno, cs.csid
-FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs
-WHERE s.sid = 2
-AND s.mvid = m.mvid
-AND s.sid = p.sid
-AND p.tid = t.tid
-AND p.tid = cs.tid;
-
-SELECT * FROM Payments LIMIT 3;
+-- INSERT INTO Bookings(bid, status, bdatetime, seats, sid, email)
+-- VALUES ((SELECT max(bid)+1 FROM Bookings), 'Pending', '2020-10-10', 1, 2, 'nmkory@gmail.com');
+DROP SEQUENCE IF EXISTS bid_sequence;
+DROP SEQUENCE IF EXISTS sid_sequence;
+DROP SEQUENCE IF EXISTS pid_sequence;
+DROP SEQUENCE IF EXISTS ssid_sequence;
+DROP SEQUENCE IF EXISTS mvid_sequence;
+CREATE SEQUENCE bid_sequence;
+CREATE SEQUENCE sid_sequence;
+CREATE SEQUENCE pid_sequence;
+CREATE SEQUENCE ssid_sequence;
+CREATE SEQUENCE mvid_sequence;
+SELECT setval('bid_sequence', (SELECT MAX(bid) FROM Bookings));
+SELECT setval('sid_sequence', (SELECT MAX(sid) FROM Shows));
+SELECT setval('pid_sequence', (SELECT MAX(pid) FROM Payments));
+SELECT setval('ssid_sequence', (SELECT MAX(ssid) FROM ShowSeats));
+SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';
