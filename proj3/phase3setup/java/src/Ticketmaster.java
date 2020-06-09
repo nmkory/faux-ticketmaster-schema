@@ -820,6 +820,7 @@ public class Ticketmaster{
   public static void ChangeSeatsForBooking(Ticketmaster esql) throws Exception{//5
     int bid;
     int sid;
+    int price;
     String query;
     List<List<String>> currentSeats = null;
     List<List<String>> availableSeats = null;
@@ -835,6 +836,18 @@ public class Ticketmaster{
           bid = Integer.parseInt(in.readLine());
           if (esql.executeQuery("SELECT * FROM ShowSeats WHERE bid = " + bid + ";") == 0) {
             System.out.println("There are no reserved seats for that booking id.");
+            System.out.println();
+            return;
+          }
+          int oldPrice = Integer.parseInt(esql.executeQueryAndReturnResult("SELECT DISTINCT price FROM ShowSeats WHERE bid = " + bid + ";").get(0).get(0));
+          System.out.print("Please provide new price for seats: ");
+          price = Integer.parseInt(in.readLine());
+          if (price < 1 || price > 20000) {
+            System.out.println("Your input is invalid!");
+            continue;
+          }
+          if (price > oldPrice) {
+            System.out.println("Per instructions, new price needs to be no more than old price.");
             System.out.println();
             return;
           }
@@ -915,14 +928,14 @@ public class Ticketmaster{
      try {
        for (int i = 0; i < seatsToAdd.size(); i++) {
         esql.executeUpdate("UPDATE ShowSeats\n" +
-                           "SET csid = " + seatsToAdd.get(i) + "\n" +
+                           "SET csid = " + seatsToAdd.get(i) + ", price = " + price + "\n" +
                            "WHERE bid = " + bid + "\n" +
-                           "AND csid = " + currentSeats.get(i).get(i) + ";");
+                           "AND csid = " + currentSeats.get(i).get(0) + ";");
        }
      } catch (Exception e) {
        e.printStackTrace();
      }//end try
-     System.out.println("Seats changed to " + );
+     System.out.println("Seats changed to: " + seatsToAdd);
 
 
     System.out.println();
