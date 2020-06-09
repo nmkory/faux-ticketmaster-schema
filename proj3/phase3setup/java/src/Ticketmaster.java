@@ -818,8 +818,32 @@ public class Ticketmaster{
   }
 
   public static void ChangeSeatsForBooking(Ticketmaster esql) throws Exception{//5
+    int bid;
+    String query;
 
-  }
+    System.out.println();
+
+    // Read in bid
+    while (true) {
+      System.out.print("Please provide booking id (bid) to change seats: ");
+      try {
+          bid = Integer.parseInt(in.readLine());
+          if (esql.executeQuery("SELECT * FROM ShowSeats WHERE bid = " + bid + ";") == 0) {
+            System.out.println("There are no reserved seats for that booking id.");
+            System.out.println();
+            return;
+          }
+          break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }  //end of try
+    }  //end of read in bid while
+
+    System.out.println();
+    return;
+  }  //ChangeSeatsForBooking()
 
   public static void RemovePayment(Ticketmaster esql){//6
     int pid;
