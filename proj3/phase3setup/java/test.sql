@@ -59,6 +59,7 @@
 -- SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
 -- SELECT * FROM Plays WHERE tid = 900;
 SELECT * FROM Bookings WHERE email = 'nmkory@gmail.com';
+SELECT * FROM ShowSeats LIMIT 3;
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
 -- SELECT * FROM Movies;

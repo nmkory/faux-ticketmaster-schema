@@ -839,6 +839,10 @@ public class Ticketmaster{
             return;
           }
           sid = Integer.parseInt(esql.executeQueryAndReturnResult("SELECT DISTINCT sid FROM ShowSeats WHERE bid = " + bid + ";").get(0).get(0));
+          availableSeats = esql.executeQueryAndReturnResult("SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = " + sid + ")\n" +
+                                                       "EXCEPT\n" +
+                                                       "SELECT csid FROM ShowSeats WHERE sid = " + sid + ";");
+          currentSeats = esql.executeQueryAndReturnResult("SELECT csid FROM ShowSeats WHERE bid = " + bid + ";");
           break;
       } catch (Exception e) {
         System.out.println("Your input is invalid!");
@@ -848,10 +852,10 @@ public class Ticketmaster{
     }  //end of read in bid and sid while
 
     System.out.println("SID: " + sid);
+    System.out.println("available: " + availableSeats);
+    System.out.println("current: " + currentSeats);
 
-    // availableSeats = esql.executeQueryAndReturnResult("SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = " + sid + ")\n" +
-    //                                              "EXCEPT\n" +
-    //                                              "SELECT csid FROM ShowSeats WHERE sid = " + sid + ";");
+
 
     System.out.println();
     return;
