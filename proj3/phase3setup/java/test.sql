@@ -62,8 +62,10 @@
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
 
-SELECT * FROM Bookings WHERE email = 'nmkory@gmail.com';
-SELECT * FROM ShowSeats WHERE bid IN (501, 502, 503);
+SELECT *
+FROM Shows
+WHERE sdate = '01-01-2019'
+AND tid =
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';

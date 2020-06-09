@@ -36,6 +36,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.ResolverStyle;
 import java.util.regex.*;
+import java.time.temporal.*;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -668,6 +669,7 @@ public class Ticketmaster{
     int duration;
     String lang;
     String genre;
+    int tid;
 
     // get dates
     while (true) {
@@ -691,6 +693,9 @@ public class Ticketmaster{
           continue;
         }
 
+        duration = (int) startTime.until(endTime, ChronoUnit.SECONDS);
+        System.out.println("Duration set at " + duration + ".");
+
         break;
       } catch (Exception e) {
         System.out.println("Your input is invalid!");
@@ -709,10 +714,28 @@ public class Ticketmaster{
           System.out.println("Invalid length.");
           continue;
         }
+
         System.out.print("Please enter the movie's country: ");
         country = in.readLine();
         if (country.length() < 1 || country.length() > 64) {
           System.out.println("Invalid length.");
+          continue;
+        }
+
+        System.out.print("Please enter the movie's description (or press enter for nothing): ");
+        description = in.readLine();
+
+        System.out.print("Please enter the movie's lang as two char (or press enter for nothing): ");
+        lang = in.readLine();
+        if (lang.length() > 2) {
+          System.out.println("Invalid length. Time to start all over!");
+          continue;
+        }
+
+        System.out.print("Please enter the movie's genre no more than 16 char (or press enter for nothing): ");
+        genre = in.readLine();
+        if (genre.length() > 16) {
+          System.out.println("Invalid length. Time to start all over!");
           continue;
         }
 
@@ -723,6 +746,26 @@ public class Ticketmaster{
         continue;
       }//end try
     } //end while
+
+    //get theater id
+    while (true) {
+      System.out.print("Please enter the show's theater id: ");
+      try { // read the integer, parse it and break.
+        tid = Integer.parseInt(in.readLine());
+
+        if (esql.executeQuery("SELECT * FROM Theaters WHERE tid = " + tid + ";") == 0) {
+          System.out.println("No theater id matches that tid.");
+          continue;
+        }
+
+
+        break;
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    }
 
     System.out.println();
     return;
