@@ -21,7 +21,7 @@
 --
 -- SELECT * FROM Bookings LIMIT 3;
 -- SELECT * FROM Shows LIMIT 3;
-SELECT * FROM Payments;
+SELECT * FROM Bookings;
 --UPDATE ShowSeats SET bid = 1 WHERE csid = 2834 AND ssid = 483 AND sid = 83;
 -- SELECT * FROM CinemaSeats WHERE csid IN (SELECT csid FROM ShowSeats WHERE sid = 83);
 
