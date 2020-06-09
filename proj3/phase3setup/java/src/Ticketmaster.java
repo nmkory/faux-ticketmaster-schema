@@ -779,8 +779,11 @@ public class Ticketmaster{
     String addMovieQuery = ("INSERT INTO Movies(mvid, title, rdate, country, description, duration, lang, genre)\n" +
                             "VALUES ((SELECT nextval('mvid_sequence')), '" + title + "', '"+ releaseDate.getYear() + "-" + String.format("%02d", releaseDate.getMonthValue()) + "-" + String.format("%02d", releaseDate.getDayOfMonth()) +"', '" + country + "', '" + description + "', '" + duration + "', '" + lang + "', '" + genre +"');");
 
+    String addShowQuery = ("INSERT INTO Shows(sid, mvid, sdate, sttime, edtime)\n" +
+                           "VALUES ((SELECT nextval('sid_sequence')),(SELECT currval('mvid_sequence')),'" + startDate.getYear() + "-" + String.format("%02d", startDate.getMonthValue()) + "-" + String.format("%02d", startDate.getDayOfMonth()) + "','" + String.format("%02d", startTime.getHour()) + ":" + String.format("%02d", startTime.getMinute()) + ":00','" + String.format("%02d", endTime.getHour()) + ":" + String.format("%02d", endTime.getMinute()) + ":00');");
     try {
       esql.executeUpdate(addMovieQuery);
+      esql.executeUpdate(addShowQuery);
     } catch (SQLException e){
      e.printStackTrace();
     }

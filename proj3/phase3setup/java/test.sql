@@ -57,10 +57,11 @@
 -- SELECT setval('pid_sequence', (SELECT MAX(pid) FROM Payments));
 -- SELECT setval('ssid_sequence', (SELECT MAX(ssid) FROM ShowSeats));
 -- SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
-
+SELECT * FROM Shows WHERE sid = 201;
+SELECT * FROM Movies WHERE mvid = 56;
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
-SELECT * FROM Movies;
+-- SELECT * FROM Movies;
 -- SELECT *
 -- FROM Shows s, Plays p
 -- WHERE s.sdate = 'date'
