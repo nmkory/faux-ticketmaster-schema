@@ -471,7 +471,43 @@ public class Ticketmaster{
   }
 
   public static void RemovePayment(Ticketmaster esql){//6
+    int pid;
+    String query;
 
+    System.out.println();
+
+    // Read in pid
+    while (true) {
+        System.out.print("Please provide payment id (pid) that was refunded: ");
+        try {
+            pid = Integer.parseInt(in.readLine());
+            if (esql.executeQuery("SELECT * FROM Payments WHERE pid = " + pid + ";") == 0) {
+              System.out.println("No payment id matches that pid.");
+              continue;
+            }
+            break;
+        } catch (Exception e) {
+            System.out.println("Invalid Input: Exception:" + e.getMessage());
+            continue;
+        }
+    }  //end of read in pid while
+
+    // Build queries
+    String deleteShowSeatQuery = "DELETE FROM ShowSeats WHERE bid IN (SELECT bid FROM Payments WHERE pid = " + pid + ");";
+    String updateBookingQuery= "UPDATE Bookings SET status = 'Cancelled' WHERE bid = (SELECT bid FROM Payments WHERE pid = " + pid + ");";
+    String deletePayment = "DELETE FROM Payments WHERE pid = " + pid + ";";
+
+    try {
+        esql.executeUpdate(deleteShowSeatQuery);
+        esql.executeUpdate(updateBookingQuery);
+        esql.executeUpdate(deletePayment);
+        System.out.println("Update made.");
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+
+    System.out.println();
+    return;
   }
 
   public static void ClearCancelledBookings(Ticketmaster esql){//7

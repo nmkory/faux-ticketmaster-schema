@@ -21,7 +21,9 @@
 --
 -- SELECT * FROM Bookings LIMIT 3;
 -- SELECT * FROM Shows LIMIT 3;
-SELECT * FROM Bookings;
+SELECT bid FROM Payments WHERE pid = 1;
+SELECT * FROM Payments WHERE pid = 5;
+SELECT * FROM Bookings WHERE status = 'Cancelled';
 --UPDATE ShowSeats SET bid = 1 WHERE csid = 2834 AND ssid = 483 AND sid = 83;
 -- SELECT * FROM CinemaSeats WHERE csid IN (SELECT csid FROM ShowSeats WHERE sid = 83);
 
