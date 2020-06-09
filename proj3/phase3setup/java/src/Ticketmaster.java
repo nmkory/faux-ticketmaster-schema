@@ -648,15 +648,15 @@ public class Ticketmaster{
       }//end try
     } //end while
 
-    String query = ("SELECT m.title, s.sdate, s.sttime, t.tname, c.sno\n" +
-                    "FROM Users u, Bookings b, Shows s, Movies m, Plays p, Theaters t, CinemaSeats c\n" +
+    String query = ("SELECT DISTINCT m.title, s.sdate, s.sttime, t.tname, c.sno\n" +
+                    "FROM Users u, Bookings b, Shows s, Movies m, Plays p, Theaters t, CinemaSeats c, ShowSeats ss\n" +
                     "WHERE u.email = '" + email + "'\n" +
                     "AND u.email = b.email\n" +
                     "AND b.sid = s.sid\n" +
                     "AND s.mvid = m.mvid\n" +
-                    "AND b.sid = p.sid\n" +
-                    "AND p.tid = t.tid\n" +
-                    "AND p.tid = c.tid;");
+                    "AND b.bid = ss.bid\n" +
+                    "AND ss.csid = c.csid\n" +
+                    "AND c.tid = t.tid;");
 
     try {
       esql.executeQueryAndPrintResult(query);
