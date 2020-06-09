@@ -819,11 +819,16 @@ public class Ticketmaster{
 
   public static void ChangeSeatsForBooking(Ticketmaster esql) throws Exception{//5
     int bid;
+    int sid;
     String query;
+    List<List<String>> currentSeats = null;
+    List<List<String>> availableSeats = null;
+    ArrayList<Integer> seats = new ArrayList<Integer>();
+    ArrayList<Integer> seatsToAdd = new ArrayList<Integer>();
 
     System.out.println();
 
-    // Read in bid
+    // Read in bid and sid
     while (true) {
       System.out.print("Please provide booking id (bid) to change seats: ");
       try {
@@ -833,13 +838,20 @@ public class Ticketmaster{
             System.out.println();
             return;
           }
+          sid = Integer.parseInt(esql.executeQueryAndReturnResult("SELECT DISTINCT sid FROM ShowSeats WHERE bid = " + bid + ";").get(0).get(0));
           break;
       } catch (Exception e) {
         System.out.println("Your input is invalid!");
         e.printStackTrace();
         continue;
       }  //end of try
-    }  //end of read in bid while
+    }  //end of read in bid and sid while
+
+    System.out.println("SID: " + sid);
+
+    // availableSeats = esql.executeQueryAndReturnResult("SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = " + sid + ")\n" +
+    //                                              "EXCEPT\n" +
+    //                                              "SELECT csid FROM ShowSeats WHERE sid = " + sid + ";");
 
     System.out.println();
     return;
@@ -927,7 +939,7 @@ public class Ticketmaster{
                     "FROM plays p, cinemas c, theaters t\n" +
                     "WHERE p.sid = " + sid + "\n"+
                     "AND p.tid = t.tid\n" +
-                    "AND t.tid = c.cid;");
+                    "AND t.cid = c.cid;");
 
     try {
       esql.executeQueryAndPrintResult(query);
