@@ -445,6 +445,7 @@ public class Ticketmaster{
     int sid;
     List<List<String>> availableSeats = null;
     ArrayList<Integer> seats = new ArrayList<Integer>();
+    ArrayList<Integer> seatsToAdd = new ArrayList<Integer>();
     System.out.println();
 
     // Capture email
@@ -486,6 +487,25 @@ public class Ticketmaster{
       }//end try
     }// end of capture sid
 
+   try {
+    esql.executeQueryAndPrintResult("SELECT m.title, s.sdate, s.sttime, t.tname, t.tid\n" +
+                                    "FROM  Shows s, Movies M, Theaters t, Plays p\n" +
+                                    "WHERE s.sid = " + sid + "\n" +
+                                    "AND s.mvid = m.mvid\n" +
+                                    "AND s.sid = p.sid\n" +
+                                    "AND p.tid = t.tid;");
+
+    esql.executeQueryAndPrintResult("SELECT cs.sno, cs.csid\n" +
+                                    "FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs\n" +
+                                    "WHERE s.sid = " + sid + "\n" +
+                                    "AND s.mvid = m.mvid\n" +
+                                    "AND s.sid = p.sid\n" +
+                                    "AND p.tid = t.tid\n" +
+                                    "AND p.tid = cs.tid;");
+    }catch (Exception e) {
+      e.printStackTrace();
+    }//end try
+
     // Extract available seats
     for(List<String> seatList : availableSeats) {
       for(String seat : seatList) {
@@ -496,7 +516,33 @@ public class Ticketmaster{
         }//end try
       }
     }
-    System.out.print("Which seats for the booking. Here is what is available: " + seats);
+
+    System.out.println("Which cinema seats for the booking. Here is what is available: " + seats);
+
+    //Get seats from User
+    while (true) {
+      System.out.println("Enter -1 when done.");
+      System.out.print("Enter cinema seats csid: ");
+      try { // read the integer, parse it and break.
+        int tempCSID = Integer.parseInt(in.readLine());
+        if (tempCSID == -1)
+          break;
+        if (!seats.contains(tempCSID)) {
+          System.out.println("That is not an available seat.");
+          continue;
+        }
+        if (seatsToAdd.contains(tempCSID)) {
+          System.out.println("That seat is already added.");
+          continue;
+        }
+        seatsToAdd.add(tempCSID);
+        System.out.println("Seat " + tempCSID + " added.");
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    } // end of while getting seats from user
 
 
     System.out.println();

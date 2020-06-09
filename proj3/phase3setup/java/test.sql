@@ -22,9 +22,20 @@
 -- SELECT * FROM Bookings LIMIT 3;
 -- SELECT * FROM Shows WHERE sid = 1;
 -- SELECT * FROM Plays W 3;
-SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = 1)
-EXCEPT
-SELECT csid FROM ShowSeats WHERE sid = 1;
+SELECT m.title, s.sdate, s.sttime, t.tname, t.tid
+FROM  Shows s, Movies M, Theaters t, Plays p
+WHERE s.sid = 2
+AND s.mvid = m.mvid
+AND s.sid = p.sid
+AND p.tid = t.tid;
+
+SELECT cs.sno, cs.csid
+FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs
+WHERE s.sid = 2
+AND s.mvid = m.mvid
+AND s.sid = p.sid
+AND p.tid = t.tid
+AND p.tid = cs.tid;
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';
