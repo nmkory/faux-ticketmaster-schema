@@ -1004,7 +1004,7 @@ public class Ticketmaster{
     LocalDate date = null;
     int cid;
     List<List<String>> sidsToDelete = null;
-    ArrayList<Integer> sids = new ArrayList<Integer>();
+    String sids = "";
 
     System.out.println();
 
@@ -1047,10 +1047,21 @@ public class Ticketmaster{
                                                       "AND p.tid = t.tid\n" +
                                                       "AND t.cid = c.cid\n" +
                                                       "AND c.cid = " + cid + ";");
-      System.out.println(sidsToDelete);
+
+      //Extract sids and build sid string for queries
+      for(List<String> sidList : sidsToDelete) {
+        for(String sid : sidList) {
+          sids += (sid + ", ");
+        }
+      }
+      sids = sids.substring(0, sids.length() - 2);
+      System.out.println("sids to delete: " + sids);
     } catch (Exception e) {
         e.printStackTrace();
     } //end of get sid try
+
+
+
 
 
 
