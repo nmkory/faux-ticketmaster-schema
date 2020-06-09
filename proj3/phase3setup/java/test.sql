@@ -57,17 +57,16 @@
 -- SELECT setval('pid_sequence', (SELECT MAX(pid) FROM Payments));
 -- SELECT setval('ssid_sequence', (SELECT MAX(ssid) FROM ShowSeats));
 -- SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
--- INSERT INTO Bookings(bid, status, bdatetime, seats, sid, email)
--- VALUES ((SELECT nextval('bid_sequence')), 'Pending', '2020-10-10', 1, 2, 'nmkory@gmail.com');
+
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
-
-SELECT *
-FROM Shows s, Plays p
-WHERE s.sdate = '01-01-2019'
-AND s.sid = p.sid
-AND p.tid = 633
-AND ((s.sttime BETWEEN '08:26:00' AND '09:25:00') OR (s.edtime BETWEEN '08:26:00' AND '09:40:00'))
+SELECT * FROM Movies;
+-- SELECT *
+-- FROM Shows s, Plays p
+-- WHERE s.sdate = 'date'
+-- AND s.sid = p.sid
+-- AND p.tid = tid
+-- AND ((s.sttime BETWEEN 'start' AND 'end') OR (s.edtime BETWEEN 'start' AND 'end'));
 -- UNION
 -- SELECT *
 -- FROM Shows s, Plays p

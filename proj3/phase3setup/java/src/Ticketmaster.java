@@ -774,7 +774,18 @@ public class Ticketmaster{
         e.printStackTrace();
         continue;
       }//end try
+    } //end get theater id while
+
+    String addMovieQuery = ("INSERT INTO Movies(mvid, title, rdate, country, description, duration, lang, genre)\n" +
+                            "VALUES ((SELECT nextval('mvid_sequence')), '" + title + "', '"+ releaseDate.getYear() + "-" + String.format("%02d", releaseDate.getMonthValue()) + "-" + String.format("%02d", releaseDate.getDayOfMonth()) +"', '" + country + "', '" + description + "', '" + duration + "', '" + lang + "', '" + genre +"');");
+
+    try {
+      esql.executeUpdate(addMovieQuery);
+    } catch (SQLException e){
+     e.printStackTrace();
     }
+
+    System.out.println("Movie added.");
 
     System.out.println();
     return;
