@@ -20,7 +20,11 @@
 --
 --
 -- SELECT * FROM Bookings LIMIT 3;
-SELECT * FROM Shows LIMIT 3;
+-- SELECT * FROM Shows WHERE sid = 1;
+-- SELECT * FROM Plays W 3;
+SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = 1)
+EXCEPT
+SELECT csid FROM ShowSeats WHERE sid = 1;
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';

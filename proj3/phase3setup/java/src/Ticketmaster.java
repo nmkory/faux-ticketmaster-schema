@@ -443,6 +443,7 @@ public class Ticketmaster{
   public static void AddBooking(Ticketmaster esql){//2
     String email;
     int sid;
+    List<List<String>> availableSeats = null;
     System.out.println();
 
     // Capture email
@@ -471,6 +472,11 @@ public class Ticketmaster{
           System.out.println("This show id is not valid in our system.");
           continue;
         }
+
+        //Get available seats
+        availableSeats = esql.executeQueryAndReturnResult("SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = " + sid + ")\n" +
+                                                     "EXCEPT\n" +
+                                                     "SELECT csid FROM ShowSeats WHERE sid = " + sid + ";");
         break;
       }catch (Exception e) {
         System.out.println("Your input is invalid!");
@@ -478,6 +484,9 @@ public class Ticketmaster{
         continue;
       }//end try
     }// end of capture sid
+
+
+    System.out.println(availableSeats.get(0).get(0));
 
     System.out.println();
     return;
