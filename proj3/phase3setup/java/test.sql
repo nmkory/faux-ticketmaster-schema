@@ -36,6 +36,8 @@ AND s.mvid = m.mvid
 AND s.sid = p.sid
 AND p.tid = t.tid
 AND p.tid = cs.tid;
+
+SELECT * FROM Payments LIMIT 3;
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';

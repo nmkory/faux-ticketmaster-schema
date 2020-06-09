@@ -446,6 +446,10 @@ public class Ticketmaster{
     List<List<String>> availableSeats = null;
     ArrayList<Integer> seats = new ArrayList<Integer>();
     ArrayList<Integer> seatsToAdd = new ArrayList<Integer>();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").withResolverStyle(ResolverStyle.STRICT);
+    LocalDateTime dateTime = null;
+    String status = null;
+    int amount = -1;
     System.out.println();
 
     // Capture email
@@ -543,6 +547,53 @@ public class Ticketmaster{
         continue;
       }//end try
     } // end of while getting seats from user
+
+    if (seatsToAdd.size() == 0) {
+      System.out.println("No seats added.");
+      return;
+    }
+
+    // Get date
+    while (true) {
+      System.out.print("Please enter booking date and time in 'yyyy-MM-dd HH:mm' format: ");
+      try { // read the integer, parse it and break.
+        dateTime = LocalDateTime.parse(in.readLine(), formatter);
+        break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        System.out.println("Make sure the format is correct and the date and time actually exist.");
+        e.printStackTrace();
+        continue;
+      }//end try
+    } //end while
+
+    // get last information
+    while (true) {
+      System.out.print("Please enter 1 for Paid booking or 2 for Pending: ");
+      try { // read the integer, parse it and break.
+        int statusNum = Integer.parseInt(in.readLine());
+        if (statusNum == 1) {
+          status = "Paid";
+          System.out.print("Please amount per seat: ");
+          amount = Integer.parseInt(in.readLine());
+          if (amount < 1 || amount > 20000) {
+            System.out.println("Your input is invalid!");
+            continue;
+          }
+          break;
+        } else if (statusNum == 2) {
+          status = "Pending";
+          break;
+        } else {
+          System.out.println("Your input is invalid!");
+          continue;
+        }
+      }catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    }
 
 
     System.out.println();
