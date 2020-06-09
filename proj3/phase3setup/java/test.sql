@@ -58,8 +58,16 @@
 -- SELECT setval('ssid_sequence', (SELECT MAX(ssid) FROM ShowSeats));
 -- SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
 -- SELECT * FROM Plays WHERE tid = 900;
-SELECT * FROM Bookings WHERE email = 'nmkory@gmail.com';
-SELECT * FROM ShowSeats WHERE bid = 501;
+SELECT * FROM Cinemas C LIMIT 3;
+
+SELECT s1.sid
+FROM Shows s1, Plays p, Theaters t, Cinemas c
+WHERE s1.sdate = '2019-01-01'
+AND s1.sid = p.sid
+AND p.tid = t.tid
+AND t.cid = c.cid
+AND c.cid = 70
+
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
 -- SELECT * FROM Movies;
