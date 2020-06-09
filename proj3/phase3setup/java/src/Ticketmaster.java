@@ -636,11 +636,16 @@ public class Ticketmaster{
                               "VALUES ((SELECT nextval('bid_sequence')), '" + status + "', '" + dateTime.getYear() + "-" + String.format("%02d", dateTime.getMonthValue()) + "-" + String.format("%02d", dateTime.getDayOfMonth()) + "', " + seatsToAdd.size() + ", " + sid + ", '" + email + "');");
 
     try {
-     esql.executeUpdate(newBookingQuery);
+      esql.executeUpdate(newBookingQuery);
+      for (int seatToAdd : seatsToAdd) {
+       esql.executeUpdate("INSERT INTO ShowSeats(ssid, sid, csid, bid, price)\n" +
+                          "VALUES ((SELECT nextval('ssid_sequence'))," + sid + ", " + seatToAdd + ",(SELECT currval('bid_sequence')), "+ amount +");");
+      }
     } catch (SQLException e){
      e.printStackTrace();
     }
 
+    System.out.println("Bookings successfully added.");
 
     System.out.println();
     return;

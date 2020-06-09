@@ -59,7 +59,11 @@
 -- SELECT setval('mvid_sequence', (SELECT MAX(mvid) FROM Movies));
 -- INSERT INTO Bookings(bid, status, bdatetime, seats, sid, email)
 -- VALUES ((SELECT nextval('bid_sequence')), 'Pending', '2020-10-10', 1, 2, 'nmkory@gmail.com');
-SELECT * FROM Bookings WHERE status = 'Paid';
+DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
+DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
+
+-- SELECT * FROM Bookings WHERE email = 'nmkory@gmail.com';
+-- SELECT * FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- SELECT bid FROM Payments WHERE pid = 1;
 -- SELECT * FROM Payments WHERE pid = 5;
 -- SELECT * FROM Bookings WHERE status = 'Cancelled';
