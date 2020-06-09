@@ -60,13 +60,11 @@
 -- SELECT * FROM Plays WHERE tid = 900;
 SELECT * FROM Cinemas C LIMIT 3;
 
-SELECT s1.sid
-FROM Shows s1, Plays p, Theaters t, Cinemas c
-WHERE s1.sdate = '2019-01-01'
-AND s1.sid = p.sid
-AND p.tid = t.tid
-AND t.cid = c.cid
-AND c.cid = 70
+SELECT * FROM ShowSeats LIMIT 3;
+SELECT * FROM Bookings LIMIT 3;
+SELECT * FROM Shows LIMIT 3;
+SELECT * FROM Theaters LIMIT 3;
+SELECT * FROM Plays WHERE sid IN (1, 203) AND tid IN (633);
 
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 -- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';

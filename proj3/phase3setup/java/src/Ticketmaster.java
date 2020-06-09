@@ -1005,10 +1005,12 @@ public class Ticketmaster{
     int cid;
     List<List<String>> sidsToDelete = null;
     String sids = "";
+    List<List<String>> tidsToDelete = null;
+    String tids = "";
 
     System.out.println();
 
-    // Capture cid
+    // Capture cid and tid
     while(true){
         System.out.print("Please Provide Cinema ID(cid) to close: ");
         try{
@@ -1060,30 +1062,46 @@ public class Ticketmaster{
         e.printStackTrace();
     } //end of get sid try
 
+    // get tids
+    try {
+      tidsToDelete = esql.executeQueryAndReturnResult("SELECT DISTINCT t.tid\n" +
+                                                      "FROM Shows s1, Plays p, Theaters t, Cinemas c\n" +
+                                                      "WHERE s1.sdate = '" + date.getYear() + "-" + String.format("%02d", date.getMonthValue()) + "-" + String.format("%02d", date.getDayOfMonth()) + "'\n" +
+                                                      "AND s1.sid = p.sid\n" +
+                                                      "AND p.tid = t.tid\n" +
+                                                      "AND t.cid = c.cid\n" +
+                                                      "AND c.cid = " + cid + ";");
 
+      //Extract tids and build tid string for queries
+      for(List<String> tidList : tidsToDelete) {
+        for(String tid : tidList) {
+          tids += (tid + ", ");
+        }
+      }
+      tids = tids.substring(0, tids.length() - 2);
+      System.out.println("tids to delete: " + tids);
+    } catch (Exception e) {
+        e.printStackTrace();
+    } //end of get tid try
 
+    // Build query strings
+    String deleteShowSeats = "DELETE FROM ShowSeats WHERE sid IN (" + sids + ")";
+    String cancelBookings = "UPDATE Bookings SET status = 'Cancelled' WHERE sid IN (" + sids + ")";
+    String deletePlays = "";
+    String deleteShows = "DELETE FROM Shows WHERE sid IN (" + sids + ")";
 
-
-
-    // String deleteShowsQuery="Delete FROM Shows s WHERE s.sid IN (SELECT s1.sid\n"
-    //                                                             "FROM Shows s1, Play p, Theaters t, Cinemas c\n" +
-    //                                                             "WHERE s1.sdate = " + date + "\n" +
-    //                                                             "AND s1.sid = p.sid\n" +
-    //                                                             "AND p.tid = t.tid\n" +
-    //                                                             "AND t.cid = c.cid\n" +
-    //                                                             "AND c.cid = " + cid + ");";
-    // String updateBookingQuery= "UPDATE Bookings b SET status = 'Cancelled' WHERE b.sid NOT IN (SELECT sid FROM Shows s);";
     // try {
-    //     esql.executeUpdate(deleteShowsQuery);
-    //     esql.executeUpdate(updateBookingQuery);
-    //     System.out.println("Shows Removed on given day at specific theater");
+    //     esql.executeUpdate(deleteShowSeats);
+    //     esql.executeUpdate(cancelBookings);
+    //     esql.executeUpdate(deleteShows);
+    //     System.out.println("Shows Removed on given day at specific theater.");
     // }catch(Exception e){
     //     e.printStackTrace();
     // }
 
     System.out.println();
     return;
-  }
+  } //RemoveShowsOnDate()
 
   public static void ListTheatersPlayingShow(Ticketmaster esql) {//9
     //
