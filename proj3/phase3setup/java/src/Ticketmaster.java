@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.ResolverStyle;
 import java.util.regex.*;
 
@@ -656,19 +657,37 @@ public class Ticketmaster{
     System.out.println();
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
     LocalDate releaseDate = null;
     LocalDate startDate = null;
+    LocalTime startTime = null;
+    LocalTime endTime = null;
+    String title;
+    String country;
+    String description;
+    int duration;
+    String lang;
+    String genre;
 
     // get dates
     while (true) {
-      System.out.print("Please enter movie release date in 'yyyy-MM-dd HH:mm' format: ");
+      System.out.print("Please enter movie release date in 'yyyy-MM-dd' format: ");
       try { // read the integer, parse it and break.
         releaseDate = LocalDate.parse(in.readLine(), formatter);
-        System.out.print("Please enter show start date in 'yyyy-MM-dd HH:mm' format: ");
+        System.out.print("Please enter show start date in 'yyyy-MM-dd' format: ");
         startDate = LocalDate.parse(in.readLine(), formatter);
 
         if (startDate.isBefore(releaseDate)) {
           System.out.println("The start date cannot come before the release date.");
+          continue;
+        }
+        System.out.print("Please enter show start time in 'HH:mm' format: ");
+        startTime = LocalTime.parse(in.readLine(), timeFormatter);
+        System.out.print("Please enter show end time in 'HH:mm' format: ");
+        endTime = LocalTime.parse(in.readLine(), timeFormatter);
+
+        if (endTime.isBefore(startTime)) {
+          System.out.println("The start time cannot come before the end time.");
           continue;
         }
 
@@ -681,7 +700,29 @@ public class Ticketmaster{
       }//end try
     } //end while
 
+    //Get movie info
+    while (true) {
+      System.out.print("Please enter the movie's title: ");
+      try {
+        title = in.readLine();
+        if (title.length() < 1 || title.length() > 128) {
+          System.out.println("Invalid length.");
+          continue;
+        }
+        System.out.print("Please enter the movie's country: ");
+        country = in.readLine();
+        if (country.length() < 1 || country.length() > 64) {
+          System.out.println("Invalid length.");
+          continue;
+        }
 
+        break;
+      } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        e.printStackTrace();
+        continue;
+      }//end try
+    } //end while
 
     System.out.println();
     return;
@@ -881,10 +922,10 @@ public class Ticketmaster{
     int cid;
 
     while (true) {
-      System.out.print("Please enter starting date range (inclusive) 'yyyy-MM-dd HH:mm' format: ");
+      System.out.print("Please enter starting date range (inclusive) 'yyyy-MM-dd' format: ");
       try { // read the integer, parse it and break.
         startDate = LocalDate.parse(in.readLine(), formatter);
-        System.out.print("Please enter ending date range (inclusive) 'yyyy-MM-dd HH:mm' format: ");
+        System.out.print("Please enter ending date range (inclusive) 'yyyy-MM-dd' format: ");
         endDate = LocalDate.parse(in.readLine(), formatter);
 
         if (endDate.isBefore(startDate)) {
