@@ -444,6 +444,7 @@ public class Ticketmaster{
     String email;
     int sid;
     List<List<String>> availableSeats = null;
+    ArrayList<Integer> seats = new ArrayList<Integer>();
     System.out.println();
 
     // Capture email
@@ -485,8 +486,18 @@ public class Ticketmaster{
       }//end try
     }// end of capture sid
 
+    // Extract available seats
+    for(List<String> seatList : availableSeats) {
+      for(String seat : seatList) {
+        try{
+          seats.add(Integer.parseInt(seat));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }//end try
+      }
+    }
+    System.out.print("Which seats for the booking. Here is what is available: " + seats);
 
-    System.out.println(availableSeats.get(0).get(0));
 
     System.out.println();
     return;
