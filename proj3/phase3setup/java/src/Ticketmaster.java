@@ -516,7 +516,12 @@ public class Ticketmaster{
           continue;
         }
 
-        esql.executeQueryAndPrintResult("SELECT tid FROM Plays WHERE sid = " + sid + ";");
+        esql.executeQueryAndPrintResult("SELECT m.title, s.sdate, s.sttime, t.tname, t.tid\n" +
+                                        "FROM  Shows s, Movies M, Theaters t, Plays p\n" +
+                                        "WHERE s.sid = " + sid + "\n" +
+                                        "AND s.mvid = m.mvid\n" +
+                                        "AND s.sid = p.sid\n" +
+                                        "AND p.tid = t.tid;");
         System.out.print("Please enter show tid: ");
 
         tid = Integer.parseInt(in.readLine());
@@ -538,12 +543,7 @@ public class Ticketmaster{
     }// end of capture sid
 
    try {
-    esql.executeQueryAndPrintResult("SELECT m.title, s.sdate, s.sttime, t.tname, t.tid\n" +
-                                    "FROM  Shows s, Movies M, Theaters t, Plays p\n" +
-                                    "WHERE s.sid = " + sid + "\n" +
-                                    "AND s.mvid = m.mvid\n" +
-                                    "AND s.sid = p.sid\n" +
-                                    "AND p.tid = t.tid;");
+
 
     esql.executeQueryAndPrintResult("SELECT cs.sno, cs.csid\n" +
                                     "FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs\n" +
@@ -852,7 +852,7 @@ public class Ticketmaster{
           int oldPrice = Integer.parseInt(esql.executeQueryAndReturnResult("SELECT DISTINCT price FROM ShowSeats WHERE bid = " + bid + ";").get(0).get(0));
           System.out.print("Please provide new price for seats: ");
           price = Integer.parseInt(in.readLine());
-          if (price < 1 || price > 20000) {
+          if (price < 0 || price > 20000) {
             System.out.println("Your input is invalid!");
             continue;
           }
@@ -1154,8 +1154,10 @@ public class Ticketmaster{
     String deletePlays = "DELETE FROM Plays WHERE sid IN (" + sids + ") AND tid in (" + tids + ")";
 
     try {
-        esql.executeUpdate(deleteShowSeats);
-        esql.executeUpdate(cancelBookings);
+        if (bids != "") {
+          esql.executeUpdate(deleteShowSeats);
+          esql.executeUpdate(cancelBookings);
+        }
         esql.executeUpdate(deletePlays);
         System.out.println("Shows Removed on given day at specific theater.");
     }catch(Exception e){
