@@ -1040,7 +1040,7 @@ public class Ticketmaster{
       }//end try
     } //end capture date
 
-    // Get sids to delete
+    // Get sids to delete from plays and showseats
     try {
       sidsToDelete = esql.executeQueryAndReturnResult("SELECT s1.sid\n" +
                                                       "FROM Shows s1, Plays p, Theaters t, Cinemas c\n" +
@@ -1056,6 +1056,10 @@ public class Ticketmaster{
           sids += (sid + ", ");
         }
       }
+      if (sids == "") {
+        System.out.println("Nothing to delete.");
+        return;
+      }
       sids = sids.substring(0, sids.length() - 2);
       System.out.println("sids to delete: " + sids);
     } catch (Exception e) {
@@ -1066,8 +1070,7 @@ public class Ticketmaster{
     try {
       tidsToDelete = esql.executeQueryAndReturnResult("SELECT DISTINCT t.tid\n" +
                                                       "FROM Shows s1, Plays p, Theaters t, Cinemas c\n" +
-                                                      "WHERE s1.sdate = '" + date.getYear() + "-" + String.format("%02d", date.getMonthValue()) + "-" + String.format("%02d", date.getDayOfMonth()) + "'\n" +
-                                                      "AND s1.sid = p.sid\n" +
+                                                      "WHERE p.sid IN (" + sids + ")\n" +
                                                       "AND p.tid = t.tid\n" +
                                                       "AND t.cid = c.cid\n" +
                                                       "AND c.cid = " + cid + ";");
@@ -1083,6 +1086,17 @@ public class Ticketmaster{
     } catch (Exception e) {
         e.printStackTrace();
     } //end of get tid try
+
+    //get csids
+    // try {
+    //   esql.executeQueryAndPrintResult("SELECT cs.csid\n" +
+    //                                   "FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs\n" +
+    //                                   "WHERE s.sid IN (" + sids + ")\n" +
+    //                                   "AND s.mvid = m.mvid\n" +
+    //                                   "AND s.sid = p.sid\n" +
+    //                                   "AND p.tid = t.tid\n" +
+    //                                   "AND p.tid = cs.tid;");
+    // }
 
     // Build query strings
     String deleteShowSeats = "DELETE FROM ShowSeats WHERE sid IN (" + sids + ")";
