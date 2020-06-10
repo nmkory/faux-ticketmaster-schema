@@ -68,6 +68,10 @@ SELECT * FROM Plays WHERE sid IN (1, 203) AND tid IN (633);
 
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
 SELECT * FROM Bookings WHERE email = 'nmkory@gmail.com';
+SELECT csid
+FROM  CinemaSeats
+WHERE tid IN (434);
+SELECT * FROM BOokings WHERE bid = 55;
 -- SELECT * FROM Movies;
 -- SELECT *
 -- FROM Shows s, Plays p

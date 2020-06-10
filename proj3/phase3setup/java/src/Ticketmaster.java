@@ -994,15 +994,22 @@ public class Ticketmaster{
 
   public static void ClearCancelledBookings(Ticketmaster esql){//7
      System.out.println();
-     String query= "DELETE\n" +
+     String query1= "DELETE\n" +
+                   "FROM Payments\n" +
+                   "WHERE bid IN (SELECT bid FROM Bookings WHERE status = 'Cancelled');";
+     String query2= "DELETE\n" +
+                   "FROM ShowSeats\n" +
+                   "WHERE bid IN (SELECT bid FROM Bookings WHERE status = 'Cancelled');";
+     String query3= "DELETE\n" +
                    "FROM Bookings b\n" +
                    "WHERE status = 'Cancelled';";
      try {
-         esql.executeUpdate(query);
+         esql.executeUpdate(query1);
+         esql.executeUpdate(query2);
+         esql.executeUpdate(query3);
          System.out.println("Cancelled bookings cleared.");
 
      }catch(Exception e){
-         System.out.println("No Cancelled Found.");
          e.printStackTrace();
      }
      System.out.println();
@@ -1017,6 +1024,10 @@ public class Ticketmaster{
     String sids = "";
     List<List<String>> tidsToDelete = null;
     String tids = "";
+    List<List<String>> csidsToFind = null;
+    String csids = "";
+    List<List<String>> bidsToFind = null;
+    String bids = "";
 
     System.out.println();
 
@@ -1100,27 +1111,56 @@ public class Ticketmaster{
 
     //get all csids
     try {
-      esql.executeQueryAndReturnResult("SELECT csid\n" +
-                                      "FROM  CinemaSeats\n" +
-                                      "WHERE tid IN (" + tids + ");");
+    csidsToFind = esql.executeQueryAndReturnResult("SELECT csid\n" +
+                                                   "FROM  CinemaSeats\n" +
+                                                   "WHERE tid IN (" + tids + ");");
+
+    //Extract csids and build csids string for queries
+    for(List<String> csidList : csidsToFind) {
+      for(String csid : csidList) {
+        csids += (csid + ", ");
+      }
+    }
+    csids = csids.substring(0, csids.length() - 2);
+    System.out.println("csids to find bids: " + csids);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    // Build query strings
-    String deleteShowSeats = "DELETE FROM ShowSeats WHERE sid IN (" + sids + ")";
-    String cancelBookings = "UPDATE Bookings SET status = 'Cancelled' WHERE sid IN (" + sids + ")";
-    String deletePlays = "";
-    String deleteShows = "DELETE FROM Shows WHERE sid IN (" + sids + ")";
+    //get all bids
+    try {
+    bidsToFind = esql.executeQueryAndReturnResult("SELECT bid\n" +
+                                                   "FROM  ShowSeats\n" +
+                                                   "WHERE csid IN (" + csids + ")\n" +
+                                                   "AND sid IN (" + sids + ");");
 
-    // try {
-    //     esql.executeUpdate(deleteShowSeats);
-    //     esql.executeUpdate(cancelBookings);
-    //     esql.executeUpdate(deleteShows);
-    //     System.out.println("Shows Removed on given day at specific theater.");
-    // }catch(Exception e){
-    //     e.printStackTrace();
-    // }
+    //Extract csids and build csids string for queries
+    for(List<String> bidList : bidsToFind) {
+      for(String bid : bidList) {
+        bids += (bid + ", ");
+      }
+    }
+    if (bids != "")
+      bids = bids.substring(0, bids.length() - 2);
+    System.out.println("bids to cancel: " + bids);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+
+    // Build query strings
+    String deleteShowSeats = "DELETE FROM ShowSeats WHERE bid IN (" + bids + ");";
+    String cancelBookings = "UPDATE Bookings SET status = 'Cancelled' WHERE bid IN (" + bids + ");";
+    String deletePlays = "DELETE FROM Plays WHERE sid IN (" + sids + ") AND tid in (" + tids + ")";
+
+    try {
+        esql.executeUpdate(deleteShowSeats);
+        esql.executeUpdate(cancelBookings);
+        esql.executeUpdate(deletePlays);
+        System.out.println("Shows Removed on given day at specific theater.");
+    }catch(Exception e){
+        e.printStackTrace();
+    }
 
     System.out.println();
     return;
