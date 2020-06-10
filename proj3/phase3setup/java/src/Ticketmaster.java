@@ -479,6 +479,7 @@ public class Ticketmaster{
   public static void AddBooking(Ticketmaster esql){//2
     String email;
     int sid;
+    int tid;
     List<List<String>> availableSeats = null;
     ArrayList<Integer> seats = new ArrayList<Integer>();
     ArrayList<Integer> seatsToAdd = new ArrayList<Integer>();
@@ -510,13 +511,22 @@ public class Ticketmaster{
       System.out.print("Please enter show sid: ");
       try { // read the integer, parse it and break.
         sid = Integer.parseInt(in.readLine());
-        if (esql.executeQuery("SELECT * FROM Shows WHERE sid = " + sid + ";") != 1) {
-          System.out.println("This show id is not valid in our system.");
+        if (esql.executeQuery("SELECT * FROM Plays WHERE sid = " + sid + ";") == 0) {
+          System.out.println("This show id is not playing anywhere.");
+          continue;
+        }
+
+        esql.executeQueryAndPrintResult("SELECT tid FROM Plays WHERE sid = " + sid + ";");
+        System.out.print("Please enter show tid: ");
+
+        tid = Integer.parseInt(in.readLine());
+        if (esql.executeQuery("SELECT * FROM Plays WHERE sid = " + sid + " AND tid = " + tid + ";") == 0) {
+          System.out.println("This theater is not playing this show.");
           continue;
         }
 
         //Get available seats
-        availableSeats = esql.executeQueryAndReturnResult("SELECT csid FROM CinemaSeats WHERE tid = (SELECT tid FROM Plays WHERE sid = " + sid + ")\n" +
+        availableSeats = esql.executeQueryAndReturnResult("SELECT csid FROM CinemaSeats WHERE tid = " + tid + "\n" +
                                                      "EXCEPT\n" +
                                                      "SELECT csid FROM ShowSeats WHERE sid = " + sid + ";");
         break;
@@ -1058,6 +1068,7 @@ public class Ticketmaster{
       }
       if (sids == "") {
         System.out.println("Nothing to delete.");
+        System.out.println();
         return;
       }
       sids = sids.substring(0, sids.length() - 2);
@@ -1066,7 +1077,7 @@ public class Ticketmaster{
         e.printStackTrace();
     } //end of get sid try
 
-    // get tids
+    // get tids from plays
     try {
       tidsToDelete = esql.executeQueryAndReturnResult("SELECT DISTINCT t.tid\n" +
                                                       "FROM Shows s1, Plays p, Theaters t, Cinemas c\n" +
@@ -1087,16 +1098,14 @@ public class Ticketmaster{
         e.printStackTrace();
     } //end of get tid try
 
-    //get csids
-    // try {
-    //   esql.executeQueryAndPrintResult("SELECT cs.csid\n" +
-    //                                   "FROM  Shows s, Movies M, Theaters t, Plays p, CinemaSeats cs\n" +
-    //                                   "WHERE s.sid IN (" + sids + ")\n" +
-    //                                   "AND s.mvid = m.mvid\n" +
-    //                                   "AND s.sid = p.sid\n" +
-    //                                   "AND p.tid = t.tid\n" +
-    //                                   "AND p.tid = cs.tid;");
-    // }
+    //get all csids
+    try {
+      esql.executeQueryAndReturnResult("SELECT csid\n" +
+                                      "FROM  CinemaSeats\n" +
+                                      "WHERE tid IN (" + tids + ");");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // Build query strings
     String deleteShowSeats = "DELETE FROM ShowSeats WHERE sid IN (" + sids + ")";

@@ -67,7 +67,7 @@ SELECT * FROM Theaters LIMIT 3;
 SELECT * FROM Plays WHERE sid IN (1, 203) AND tid IN (633);
 
 -- DELETE FROM ShowSeats WHERE bid IN (501, 502, 503);
--- DELETE FROM Bookings WHERE email = 'nmkory@gmail.com';
+SELECT * FROM Bookings WHERE email = 'nmkory@gmail.com';
 -- SELECT * FROM Movies;
 -- SELECT *
 -- FROM Shows s, Plays p
